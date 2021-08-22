@@ -1,0 +1,97 @@
+Barcode,Well,Name,SampleID,Type
+FD03655768,A1,r0040_b0034_rhlR,a2340b40-1339-422b-9cea-efa875439595,Plasmid DNA (source)
+FD03655711,B1,r0040_34_LuxI,7b0cdffb-c484-40ce-8392-5f30010061e2,Plasmid DNA (source)
+FD03655721,C1,,,
+FD03655713,D1,PCinTetS_eCFP_Linker2_Ptet_R0040_scar33scar_LuxR_Plac_R0011_scarS175_LasR,b0c04e10-55ce-4018-a1b0-000ef5ba036d,Plasmid DNA (assembled)
+FD03655714,E1,PCinTetS_eCFP_Linker2_Ptet_R0040_scar33scar_LuxR_Linker4,9ba98cb1-bfc1-49c1-b7a8-f2e40e9ee97f,Plasmid DNA (assembled)
+FD03655715,F1,PCinTetS_eCFP_P81_scar34scar_eYFP_Ptet_R0040_B0034_CinR_Linker4,aa5f15da-4901-4212-b6dd-d09adaae2925,Plasmid DNA (assembled)
+FD03655752,G1,r0040_b0033_rhlR,b54e9808-a472-4cc2-af07-cfe2de0009bc,Plasmid DNA (source)
+FD03655788,H1,4_pBADLasR_mutSapI,38037ed5-f6e0-4912-b318-4a0583e1ed07,Plasmid DNA (source)
+FD03655732,A2,P76_scar34scar_eCFP_P81_scar34scar_eYFP_Plac_R0011_scar33scar_LuxR_Ptet_R0011_scarS175_LasR,b61cbcbc-cd49-4b02-9c49-e4afd0b8b46d,Plasmid DNA (assembled)
+FD03655719,B2,r0040_max_LuxI,205733ad-4755-40ec-970f-7add8896faf5,Plasmid DNA (source)
+FD03655712,C2,pCINl_b0033_lacIND,3132f9cf-8b0e-4e7a-995a-da57f76526eb,Plasmid DNA (source)
+FD03655729,D2,,,
+FD03655722,E2,PCinTetS_eCFP_Linker2_Ptet_R0040_B0034_CinR_Linker4,99fa5538-1155-4b1d-bab5-2555c1c53735,Plasmid DNA (assembled)
+FD03655723,F2,PCinTetS_eCFP_Linker2_Linker3_Plac_R0011_scarS175_LasR,426be61b-07ac-4404-be9d-8addd3e98741,Plasmid DNA (assembled)
+FD03655716,G2,Linker1_P81_scar34scar_eYFP_Plac_R0011_scar33scar_LuxR_Ptet_R0040_scarS175_LasR,01168c25-68c6-4704-bc0f-96407f9e7829,Plasmid DNA (assembled)
+FD03655749,H2,2_PR_YFP,2be580c9-e5c3-46e3-97e6-5f37bae42dbb,Plasmid DNA (source)
+FD03655724,A3,P76_scar34scar_eCFP_Linker2_Plac_R0011_scar33scar_LuxR_Ptet_R0040_scarS175_LasR,f642e964-4b20-4d8e-b915-b92ad20538a0,Plasmid DNA (assembled)
+FD03655735,B3,pCINtetS_b0034_eCFP,bb84848d-aadf-4184-909d-a192c7f900a9,Plasmid DNA (source)
+FD03655720,C3,pRHLl_b0033_tetRND,86d522a1-720a-49da-8828-8e378f9797e7,Plasmid DNA (source)
+,D3,,,
+FD03655730,E3,PCinTetS_eCFP_P81_scar34scar_eYFP_Ptet_R0040_B0034_CinR_Plac_R0011_scarS175_LasR,dfbc084f-aaf9-4971-8892-94fe42b344da,Plasmid DNA (assembled)
+FD03655731,F3,PCinTetS_eCFP_Linker2_Ptet_R0040_B0034_CinR_Plac_R0011_scarS175_LasR,91773464-47b3-4874-a314-fbd164f92f5f,Plasmid DNA (assembled)
+FD03655774,G3,r0011_max_LasI,335a0c7d-640c-4ae0-9d65-eac486aec981,Plasmid DNA (source)
+FD03655741,H3,3_PR_RFP,ca21cbfa-5d2c-415e-92db-878c74e580de,Plasmid DNA (source)
+FD03655736,A4,r0011_b0032_cinR,55075872-f23d-4f3d-bfe8-a8b682eef906,Plasmid DNA (source)
+FD03655743,B4,r0011_b0033_rhlR,9cdb3dbb-4bcd-4d5e-afa1-3c498166b693,Plasmid DNA (source)
+FD03655930,C4,,,
+,D4,,,
+FD03655738,E4,PCinTetS_eCFP_P81_scar34scar_eYFP_Linker3_Plac_R0011_scarS175_LasR,7ca9dae2-b1bf-4c25-b043-2e5adf535c30,Plasmid DNA (assembled)
+FD03655739,F4,PCinTetS_eCFP_P81_scar34scar_eYFP_Ptet_R0040_scar33scar_LuxR_Linker4,c06ad378-68af-415e-a94a-090fcc5ebb0e,Plasmid DNA (assembled)
+FD03655726,G4,Linker 3,99220d3b-9f6e-4d92-b01c-85b4aa0f9b13,Plasmid DNA (source)
+FD03655717,H4,1_PR_CFP,1691e292-c3d6-4445-a6f6-cb6c64651109,Plasmid DNA (source)
+FD03655758,A5,r0011_1000_LasI,c756c9f2-e0de-4ebe-ba87-1118a05eee87,Plasmid DNA (source)
+FD03655751,B5,r0040_b0033_cinR,e702f63d-8d19-49d6-9fe9-2f3a46a1a699,Plasmid DNA (source)
+FD03655754,C5,,,
+,D5,,,
+FD03655746,E5,,,
+FD03655747,F5,P76_scar34scar_eCFP_Linker2_Ptet_R0040_B0034_CinR_Linker4,7c9be080-f1a4-47c9-b9fa-e43dbb3927e9,Plasmid DNA (assembled)
+FD03655760,G5,r0011_b0034_cinR,1fc0392f-fd59-4dff-9fdd-5f3dbfa36f9d,Plasmid DNA (source)
+,H5,,,
+FD03655750,A6,r0011_100_LasI,2f045261-9a70-4be1-8453-d489d36c9b98,Plasmid DNA (source)
+FD03655759,B6,r0011_b0032_rhlR,c03be3a2-a47c-4d1a-b715-9f737a36e66a,Plasmid DNA (source)
+FD03655782,C6,r0011_1000_LuxI,da0df5ce-d8ab-4a91-be76-153f204cb62e,Plasmid DNA (source)
+,D6,,,
+FD03656088,E6,,,
+FD03655755,F6,PCinTetS_eCFP_P81_scar34scar_eYFP_Ptet_R0040_scar33scar_LuxR_Plac_R0011_scarS175_LasR,ff5e39c0-577a-4894-be44-785df3f58060,Plasmid DNA (assembled)
+FD03655756,G6,,,
+,H6,,,
+FD03655769,A7,,,
+FD03655767,B7,r0040_b0032_cinR,f3818fcd-74f8-4b4e-bcce-d11bccb0205e,Plasmid DNA (source)
+FD03655744,C7,r0011_b0033_cinR,0903c475-0f2c-4815-869b-228366994749,Plasmid DNA (source)
+FD03655785,D7,,,
+FD03655762,E7,,,
+FD03655795,F7,P76_scar34scar_eCFP_P81_scar34scar_eYFP_r0080_CinR_Linker4,f1788aaa-60d7-494b-be8b-4d8fa17537b6,Plasmid DNA (assembled)
+FD03655764,G7,,,
+FD03655710,H7,Linker 1,c2c45d48-0679-4f93-8c70-a922bd058693,Plasmid DNA (source)
+FD03655766,A8,r0011_34_LasI,3f20036e-1a91-4174-938a-af250dc64e05,Plasmid DNA (source)
+FD03655775,B8,pCINl_b0034_eCFP,cfd208c7-5363-49c4-a3b3-f7bc4856de09,Plasmid DNA (source)
+FD03655773,C8,,,
+FD03655781,D8,,,
+FD03655770,E8,,,
+FD03655787,F8,PCinTetS_RBS15000_eCFP_P81_scar34scar_eYFP_r0080_CinR_Linker4,c9fe8b7a-7d22-4a7a-802e-e3da0890705f,Plasmid DNA (assembled)
+FD03655772,G8,,,
+FD03655794,H8,4_r0011_S175_lasR,b291b5cf-8e64-4458-b212-da1a27c0c9bc,Plasmid DNA (source)
+FD03655733,A9,3_r0011_b0033_luxR,98e6152a-b862-4a10-bf18-78e39297a7dc,Plasmid DNA (source)
+FD03655745,B9,,,
+FD03655761,C9,,,
+FD03655789,D9,,,
+FD03655778,E9,,,
+FD03655779,F9,P76_scar34scar_eCFP_P81_scar34scar_eYFP_r0080_LuxR_Linker4,db17c88f-8499-49cd-9dff-c63d01d68158,Plasmid DNA (assembled)
+,G9,,,
+,H9,,,
+FD03655790,A10,r0011_max_LuxI,64c2f29e-abfa-4804-8063-da206df226f7,Plasmid DNA (source)
+FD03655791,B10,pCINtetS_b0033_lacIND,8f14c38d-b457-4c63-9e49-8d5ad6ea8b50,Plasmid DNA (source)
+,C10,,,
+FD03655742,D10,PSB6A1_Dest,a98ea446-b56c-480e-8c99-fed7ed4ef5b5,Other
+FD03655786,E10,,,
+FD03655771,F10,PCinTetS_RBS15000_eCFP_P81_scar34scar_eYFP_r0080_LuxR_Linker4,e8e5cea6-a924-4372-ab25-ae7d367e1fb0,Plasmid DNA (assembled)
+FD03655805,G10,r0040_b0034_cinR,a426ddbe-8769-4956-ba5e-3fa840a4538c,Plasmid DNA (source)
+FD03655783,H10,pRHLl_b0034_eYFP,35d7a42d-a549-4d52-99a3-7c59292812e7,Plasmid DNA (source)
+FD03655798,A11,r0040_34_LasI,e23a6728-0e3d-4f84-ac3e-b33e9049f31f,Plasmid DNA (source)
+FD03655799,B11,pRHLlacM_b0033_tetRND,a5b46866-3d7f-4817-9677-405f3a7f6170,Plasmid DNA (source)
+FD03655792,C11,,,
+FD03655793,D11,,,
+FD03655757,E11,2_P81_YFP (deprecated),5cd5cccb-b520-422d-9b1b-b111159f7258,Plasmid DNA (source)
+FD03655763,F11,P76_scar34scar_eCFP_P81_scar34scar_eYFP_Linker3_r0080_LasR,ffcea149-8188-4ae0-96ee-a1a04312f209,Plasmid DNA (assembled)
+,G11,,,
+FD03655718,H11,Linker 2,b27a3551-68eb-4240-86c6-0137251a75b4,Plasmid DNA (source)
+,A12,,,
+FD03655728,B12,r0040_b0032_rhlR,b6ef7f6f-3318-4237-8157-5aeb3e72fbb1,Plasmid DNA (source)
+FD03655740,C12,R0040_33_LuxR_pTwisthigh,0defa6cd-9cdc-4603-bbeb-fdecafc860fc,Plasmid DNA (source)
+FD03655765,D12,1_P76_CFP (deprecated),18c497b2-970a-466a-bdf9-0ee8188c8a3e,Plasmid DNA (source)
+FD03656096,E12,R33 S175 Exclusive double reporter LacI300ND Tet33AAV,44ca95d9-9e6e-454f-b5e3-9fcfa57bf09d,Plasmid DNA (assembled)
+FD03655725,F12,4_r0011_S175_lasR (deprecated),275ba048-cee4-411e-9c11-c511bcb59df4,Plasmid DNA (source)
+,G12,,,
+FD03655800,H12,,,

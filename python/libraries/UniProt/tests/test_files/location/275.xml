@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/locations/275">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+<skos:prefLabel>Virion membrane</skos:prefLabel>
+<alias>Virion membrane</alias>
+<rdfs:comment>The membrane surrounding the virion.</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/locations/162"/>
+<partOf rdf:resource="http://purl.uniprot.org/locations/274"/>
+<skos:exactMatch rdf:resource="http://purl.obolibrary.org/obo/GO_0055036"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.obolibrary.org/obo/GO_0055036">
+<rdfs:label>virion membrane</rdfs:label>
+<database rdf:resource="http://purl.uniprot.org/database/go"/>
+</rdf:Description>
+</rdf:RDF>
+

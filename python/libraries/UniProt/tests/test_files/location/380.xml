@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/locations/380">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+<skos:prefLabel>Host membrane</skos:prefLabel>
+<alias>Host membrane</alias>
+<rdfs:comment>A host membrane is a lipid bilayer which surrounds host enclosed spaces and compartments. This selectively permeable structure is essential for effective separation of a host cell or organelle from its surroundings.</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/locations/162"/>
+<skos:exactMatch rdf:resource="http://purl.obolibrary.org/obo/GO_0033644"/>
+<owl:sameAs rdf:resource="http://purl.uniprot.org/keywords/1043"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.obolibrary.org/obo/GO_0033644">
+<rdfs:label>host cell membrane</rdfs:label>
+<database rdf:resource="http://purl.uniprot.org/database/go"/>
+</rdf:Description>
+</rdf:RDF>
+

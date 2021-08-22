@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:obo="http://purl.obolibrary.org/obo/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/keywords/564">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Concept"/>
+<skos:prefLabel>Palmitate</skos:prefLabel>
+<skos:altLabel>n-hexadecanoate</skos:altLabel>
+<skos:altLabel>Palmitoylated</skos:altLabel>
+<rdfs:comment>Protein which is posttranslationally modified by the attachment of at least one palmitate group. The palmitate (16-carbon saturated fatty acid) group is usually attached to cysteine via a thioester bond. Lysine, serine and threonine may also serve as palmitate acceptors. Many palmitoylproteins are membrane associated either directly through the palmitate moiety or as transmembrane proteins anchored by the fatty acid. However, a few are actually secreted from cells.</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/keywords/449"/>
+<category rdf:resource="http://purl.uniprot.org/keywords/9991"/>
+</rdf:Description>
+</rdf:RDF>
+

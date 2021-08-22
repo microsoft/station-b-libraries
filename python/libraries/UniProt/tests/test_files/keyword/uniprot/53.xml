@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:obo="http://purl.obolibrary.org/obo/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/keywords/53">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Concept"/>
+<skos:prefLabel>Apoptosis</skos:prefLabel>
+<skos:altLabel>Active cell death</skos:altLabel>
+<skos:altLabel>Apoptotic programmed cell death</skos:altLabel>
+<skos:altLabel>Type I programmed cell death</skos:altLabel>
+<rdfs:comment>Protein involved in apoptotic programmed cell death. Apoptosis is characterized by cell morphological changes, including blebbing, cell shrinkage, nuclear fragmentation, chromatin condensation and chromosomal DNA fragmentation, and eventually death. Unlike necrosis, apoptosis produces cell fragments, called apoptotic bodies, that phagocytic cells are able to engulf and quickly remove before the contents of the cell can spill out onto surrounding cells and cause damage. In general, apoptosis confers advantages during an organism's life cycle.</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/keywords/9999"/>
+<category rdf:resource="http://purl.uniprot.org/keywords/9999"/>
+<rdfs:seeAlso rdf:resource="http://purl.obolibrary.org/obo/GO_0006915"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.obolibrary.org/obo/GO_0006915">
+<rdfs:label>apoptotic process</rdfs:label>
+<database rdf:resource="http://purl.uniprot.org/database/go"/>
+</rdf:Description>
+</rdf:RDF>
+

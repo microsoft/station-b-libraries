@@ -1,0 +1,10 @@
+[run]
+parallel = true
+source =
+    pyBCKG
+
+[report]
+show_missing = true
+precision = 2
+fail_under = 20.56
+

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:obo="http://purl.obolibrary.org/obo/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/keywords/325">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Concept"/>
+<skos:prefLabel>Glycoprotein</skos:prefLabel>
+<skos:altLabel>Glycosylated</skos:altLabel>
+<rdfs:comment>Protein containing one or more covalently linked carbohydrates of various types, i.e. from monosaccharides to branched polysaccharides, including glycosylphosphatidylinositol (GPI), glycosaminoglycans (GAG).</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/keywords/9991"/>
+<skos:narrower rdf:resource="http://purl.uniprot.org/keywords/336"/>
+<skos:narrower rdf:resource="http://purl.uniprot.org/keywords/654"/>
+<skos:narrower rdf:resource="http://purl.uniprot.org/keywords/730"/>
+<skos:narrower rdf:resource="http://purl.uniprot.org/keywords/971"/>
+<category rdf:resource="http://purl.uniprot.org/keywords/9991"/>
+</rdf:Description>
+</rdf:RDF>
+

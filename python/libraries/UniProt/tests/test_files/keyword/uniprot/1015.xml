@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:obo="http://purl.obolibrary.org/obo/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/keywords/1015">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Concept"/>
+<skos:prefLabel>Disulfide bond</skos:prefLabel>
+<rdfs:comment>Protein which is modified by the formation of a bond between the thiol groups of two peptidyl-cysteine residues. The process of chemical oxidation that forms interchain disulfide bonds can produce stable, covalently linked protein dimers, multimers or complexes, whereas intrachain disulfide bonds can contribute to protein folding and stability. Depending on the protein environment, some disulfide bonds are more labile, forming transient redox-active disulfide bonds that are alternately reduced and oxidized in the course of an enzymatic reaction.</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/keywords/9991"/>
+<category rdf:resource="http://purl.uniprot.org/keywords/9991"/>
+</rdf:Description>
+</rdf:RDF>
+
