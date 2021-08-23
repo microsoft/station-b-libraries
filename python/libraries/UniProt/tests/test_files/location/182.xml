@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/locations/182">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+<skos:prefLabel>Nucleus membrane</skos:prefLabel>
+<skos:altLabel>Nuclear membrane</skos:altLabel>
+<alias>Nucleus membrane</alias>
+<rdfs:comment>The membrane surrounding the nucleus. This term is used when it is not known if the protein is found in or associated with the inner or outer nuclear membrane.</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/locations/162"/>
+<partOf rdf:resource="http://purl.uniprot.org/locations/147"/>
+<partOf rdf:resource="http://purl.uniprot.org/locations/178"/>
+<skos:exactMatch rdf:resource="http://purl.obolibrary.org/obo/GO_0031965"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.obolibrary.org/obo/GO_0031965">
+<rdfs:label>nuclear membrane</rdfs:label>
+<database rdf:resource="http://purl.uniprot.org/database/go"/>
+</rdf:Description>
+</rdf:RDF>
+

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/locations/173">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+<skos:prefLabel>Mitochondrion</skos:prefLabel>
+<alias>Mitochondrion</alias>
+<rdfs:comment>The mitochondrion is a semiautonomous, self-reproducing organelle that occurs in the cytoplasm of all cells of most, but not all, eukaryotes. Each mitochondrion is surrounded by a double limiting membrane. The inner membrane is highly invaginated, and its projections are called cristae. Mitochondria are the sites of the reactions of oxidative phosphorylation, which result in the formation of ATP. The size and coding capacity of the mitochondrial DNA varies considerably in different organisms, and encodes rRNAs, tRNAs and essential mitochondrial proteins.</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+<skos:exactMatch rdf:resource="http://purl.obolibrary.org/obo/GO_0005739"/>
+<owl:sameAs rdf:resource="http://purl.uniprot.org/keywords/496"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.obolibrary.org/obo/GO_0005739">
+<rdfs:label>mitochondrion</rdfs:label>
+<database rdf:resource="http://purl.uniprot.org/database/go"/>
+</rdf:Description>
+</rdf:RDF>
+

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:obo="http://purl.obolibrary.org/obo/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/keywords/261">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Concept"/>
+<skos:prefLabel>Viral envelope protein</skos:prefLabel>
+<rdfs:comment>Protein of the viral envelope, a lipoprotein membrane which forms the outermost layer of the virion in certain viruses.</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/keywords/946"/>
+<category rdf:resource="http://purl.uniprot.org/keywords/9998"/>
+<rdfs:seeAlso rdf:resource="http://purl.obolibrary.org/obo/GO_0019031"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.obolibrary.org/obo/GO_0019031">
+<rdfs:label>viral envelope</rdfs:label>
+<database rdf:resource="http://purl.uniprot.org/database/go"/>
+</rdf:Description>
+</rdf:RDF>
+

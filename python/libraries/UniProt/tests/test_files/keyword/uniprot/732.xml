@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:obo="http://purl.obolibrary.org/obo/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/keywords/732">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Concept"/>
+<skos:prefLabel>Signal</skos:prefLabel>
+<skos:altLabel>Signal peptide</skos:altLabel>
+<skos:altLabel>Signal sequence</skos:altLabel>
+<rdfs:comment>Protein which has a signal sequence, a peptide usually present at the N-terminus of proteins and which is destined to be either secreted or part of membrane components. The signal sequence (usually 20-30 amino acids long) interacts with the signal recognition particle and directs the ribosome to the endoplasmic reticulum where co-translational insertion takes place. Signal peptides are highly hydrophobic but have some positively charged amino acids. Normally, the signal sequence is removed from the growing peptide chain by specific peptidases (signal peptidases) located on the cisternal face of the endoplasmic reticulum.</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/keywords/9994"/>
+<category rdf:resource="http://purl.uniprot.org/keywords/9994"/>
+</rdf:Description>
+</rdf:RDF>
+

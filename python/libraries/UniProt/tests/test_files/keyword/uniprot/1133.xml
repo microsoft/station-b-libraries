@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:obo="http://purl.obolibrary.org/obo/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/keywords/1133">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Concept"/>
+<skos:prefLabel>Transmembrane helix</skos:prefLabel>
+<skos:altLabel>Alpha-helical transmembrane</skos:altLabel>
+<skos:altLabel>Pauling-Corey-Branson alpha helix</skos:altLabel>
+<rdfs:comment>Protein with at least one transmembrane helical domain, a membrane-spanning domain with an hydrogen-bonded helical configuration, including alpha-, 3-10-, and pi-helices. The transmembrane alpha-helix is very common, while the 3-10-helix is found at the ends of alpha-helices and the pi-helix, is more rare.</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/keywords/472"/>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/keywords/812"/>
+<category rdf:resource="http://purl.uniprot.org/keywords/9994"/>
+</rdf:Description>
+</rdf:RDF>
+

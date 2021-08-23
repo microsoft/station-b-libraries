@@ -1,4 +1,8 @@
-# Project
+# Microsoft Station B Libraries for Biological Computation
+
+## Overview
+
+This repositories contains various libraries and projects developed as part of the Station B project.
 
 Adding test content.
 

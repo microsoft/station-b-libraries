@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns="http://purl.uniprot.org/core/" xmlns:obo="http://purl.obolibrary.org/obo/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<owl:Ontology rdf:about="">
+<owl:imports rdf:resource="http://purl.uniprot.org/core/"/>
+</owl:Ontology>
+<rdf:Description rdf:about="http://purl.uniprot.org/keywords/1165">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Concept"/>
+<skos:prefLabel>Clathrin-mediated endocytosis of virus by host</skos:prefLabel>
+<skos:altLabel>Virion endocytosis by clathrin-coated vesicle</skos:altLabel>
+<rdfs:comment>Viral protein involved in virus internalization by the host cell via clathrin-mediated endocytosis. In response to an internalization signal, clathrin is assembled on the inside face of the cell membrane to form characteristic invaginations or clathrin coated pits that pinch off through the action of DNM1/Dynamin-1 or DNM2/Dynamin-2. The virus bound to its host cell receptor is internalized into clathrin-coated vesicles (CCV). Endocytic CCV deliver their viral content to early endosomes. The endosomal acidic pH and/or receptor binding usually induces structural modifications of the virus surface proteins that lead to penetration of the endosomal membrane via fusion or permeabilization mechanisms.</rdfs:comment>
+<rdfs:subClassOf rdf:resource="http://purl.uniprot.org/keywords/1164"/>
+<category rdf:resource="http://purl.uniprot.org/keywords/9999"/>
+<rdfs:seeAlso rdf:resource="http://purl.obolibrary.org/obo/GO_0075512"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.obolibrary.org/obo/GO_0075512">
+<rdfs:label>clathrin-dependent endocytosis of virus by host cell</rdfs:label>
+<database rdf:resource="http://purl.uniprot.org/database/go"/>
+</rdf:Description>
+</rdf:RDF>
+
