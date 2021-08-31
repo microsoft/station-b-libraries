@@ -14,7 +14,7 @@ ROOT_DIR = Path(__file__).parent.parent
 TEST_DIR = ROOT_DIR / "tests"
 
 
-@pytest.mark.timeout(10)
+@pytest.mark.timeout(20)
 def test_barcoder():
     test_file = TEST_DIR / "plate_from_bckg.csv"
     barcode_df = pd.DataFrame(pd.read_csv(test_file))
