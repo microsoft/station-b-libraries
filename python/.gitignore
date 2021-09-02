@@ -138,17 +138,6 @@ SC_RESULTS
 *.cmd
 
 libraries/StaticCharacterization/logistic_example_1.csv
-projects/OXB_Transfection/Specs/Rescaled2_FixScale.yml
-projects/OXB_Transfection/Specs/Rescaled2_VaryScale.yml
-projects/OXB_Transfection/Specs/Rescaled5_FixScale.yml
-projects/OXB_Transfection/Specs/Rescaled5_VaryScale.yml
-projects/OXB_Transfection/Specs/Unscaled_FixScale.yml
-projects/OXB_Transfection/Specs/Unscaled_VaryScale.yml
-
-projects/OXB_Transfection/Data/localcache.json
-projects/OXB_Transfection/Data/_*
-
-projects/OXB_Proteomics/Data/*
 
 projects/CellSignalling/Data/*
 projects/CellSignalling/Specs/_*
@@ -158,7 +147,6 @@ projects/CellSignalling/Configs/_*
 **/.DS_Store
 
 # app related
-projects/Replicates/data
 projects/Malvern/api/MalvernEnv
 projects/Malvern/api/.azure
 projects/Malvern/package-lock.json
