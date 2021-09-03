@@ -1,0 +1,23 @@
+data:
+  folder: Tutorial/Data
+  files:
+    init: tutorial-zoomopt.csv
+  inputs:
+    x:
+      lower_bound: 0.0
+      upper_bound: 10.0
+      normalise: None
+      log_transform: False
+  output_column: objective
+  output_settings:
+    normalise: None
+    log_transform: False
+
+zoomopt:
+  batch: 5
+  design: Grid
+  shrinking_factor: 0.5
+
+optimization_strategy: Zoom
+
+results_dir: Results/tutorial-zoomopt

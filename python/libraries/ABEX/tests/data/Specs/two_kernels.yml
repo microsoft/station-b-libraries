@@ -1,0 +1,36 @@
+data:
+  folder: Tutorial/Data
+  files:
+    init: tutorial-intro-data.csv
+  inputs:
+    x:
+      lower_bound: 0.0
+      upper_bound: 1.0
+      normalise: None
+    y:
+      lower_bound: 0.0
+      upper_bound: 1.0
+      normalise: None
+  output_column: objective
+  output_settings:
+    normalise: None
+
+model:
+  kernel: RBF
+  add_bias: True
+
+training:
+  num_folds: 3
+  iterations: 10
+  upper_bound: 1
+  plot_slice1d: True
+  plot_slice2d: True
+
+bayesopt:
+  batch: 5
+
+results_dir: Results/tutorial-intro
+
+
+model:
+  kernel: ["@k", Matern, RBF]
