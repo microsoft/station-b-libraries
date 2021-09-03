@@ -7,8 +7,6 @@
 C.E. Clark, The Greatest of a Finite Set of Random Variables, Operations Research, Vol. 9, No. 2 (1961).
 
 TODO: The contents of this module should be moved into the emukit repository once complete.
-TODO: There is also a more proper implementation with gradients worked on here:
-https://dev.azure.com/msrcambridge/biocomputing/_git/global-penalisation
 """
 from typing import Dict, Optional, Tuple
 
