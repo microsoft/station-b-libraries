@@ -1,0 +1,17 @@
+-r requirements.txt
+azure-keyvault-secrets==4.3.0
+docutils==0.16
+flake8==3.9.2
+interrogate==1.4.0
+mock==4.0.3
+mypy==0.910
+jupyter==1.0.0
+pytest==6.2.4
+pytest-cov==2.12.1
+pytest-timeout==1.4.2
+pytest-xdist==2.3.0
+sphinx==4.1.2
+sphinx-rtd-theme==0.4.3
+azure-identity==1.6.0
+pre-commit==2.13.0
+pytest-testmon==1.1.1

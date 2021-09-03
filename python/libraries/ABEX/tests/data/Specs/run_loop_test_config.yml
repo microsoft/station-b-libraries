@@ -1,0 +1,67 @@
+## Realistic cell-signalling configuration file, useful for tests
+data:
+  use_bckg: False
+  folder: "test_outputs/Data/"
+  inputs:
+    "Ara":
+      unit: mM
+      log_transform: True
+      lower_bound: 0.0001
+      upper_bound: 100.0
+      normalise: Full
+    "ATC":
+      unit: ng/ml
+      log_transform: True
+      lower_bound: 0.0001
+      upper_bound: 100.0
+      normalise: Full
+    "C_on":
+      unit: nM
+      log_transform: True
+      lower_bound: 0.01
+      upper_bound: 25000.0
+      normalise: Full
+  output_column: "Crosstalk Ratio"
+  output_settings:
+    log_transform: True
+    normalise: None
+  
+model:
+  kernel: Matern
+  add_bias: True
+  anisotropic_lengthscale: False
+  priors:
+    sum.Mat52.variance:
+      distribution: InverseGamma
+      parameters: {a: 2.0, b: 1.0}
+    sum.Mat52.lengthscale:
+      distribution: InverseGamma
+      parameters: {a: 3.0, b: 1.0}
+    sum.bias.variance:
+      distribution: InverseGamma
+      parameters: {a: 2.0, b: 1.0}
+    Gaussian_noise.variance:
+      distribution: InverseGamma
+      parameters: {a: 5.0, b: 1.0}
+training:
+  hmc: False
+  num_folds: 0
+  iterations: 2
+  plot_slice1d: False # Switched off for computational efficiency only
+  plot_slice2d: False # Switched off for computational efficiency only
+
+bayesopt:
+  batch: 2  # or: ["@batch", 5, 10]
+  acquisition: EXPECTED_IMPROVEMENT
+  num_samples: 10
+  batch_strategy: ["@strat", "LocalPenalization", "MomentMatchedEI"]
+  acquisition_optimizer: Random
+
+# init_design_strategy: ["@", "Random", "Latin"]
+init_design_strategy: Random
+multimodal: True
+simulator_noise: 0.5  #  ["@noise", 0.0, 0.5, 1.0]
+num_init_points: 2 
+incorporate_growth: False
+
+results_dir: "test_outputs/Results/"

@@ -1,0 +1,26 @@
+growth_signal: OD
+growth_model: Logistic          # Available: Logistic and Gompertz.
+maturation_offset: 0.85         # Time (in hours) of maximal activity inferred from the growth signal needs to be adjusted by this value.
+signal_properties:              # Maturation rate is given in 1/hour units.
+  EYFP:
+    maturation_rate: 1.038
+    color: "gold"
+    background_subtract: True
+  ECFP:
+    maturation_rate: 0.834
+    color: "cyan"
+    background_subtract: True
+  mRFP1:
+    maturation_rate: 1.038
+    color: "red"
+    background_subtract: True
+signals:
+  - EYFP
+  - ECFP
+reference: mRFP1
+time_window: 
+  reference: 10.0
+  left: 8.0
+  right: 8.0
+reference_wells:
+  - 064d02dd-f912-49a0-964a-5c758e92367b

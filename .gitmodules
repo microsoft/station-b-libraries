@@ -1,0 +1,4 @@
+[submodule "python/libraries/Emukit"]
+	path = python/libraries/Emukit
+	url = https://github.com/sennendoko/emukit.git
+	branch = dacart/20515-emukit-hmc

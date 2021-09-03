@@ -1,0 +1,270 @@
+#  ------------------------------------------------------------------------------------------
+#  Copyright (c) Microsoft Corporation. All rights reserved.
+#  Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+#  ------------------------------------------------------------------------------------------
+from __future__ import annotations
+
+import argparse
+import logging
+from typing import Any, Callable, Dict, List, Optional, Set, Type, Union
+
+import param
+from psbutils.type_annotations import T
+
+# Need this as otherwise a description of all the params in a class is added to the class docstring
+# which makes generated documentation with sphinx messy.
+param.parameterized.docstring_signature = False
+param.parameterized.docstring_describe_params = False
+
+
+def is_private_field_name(name: str) -> bool:
+    """
+    A private field is any Python class member that starts with an underscore eg: _hello
+    """
+    return name.startswith("_")
+
+
+class ListOrDictParam(param.Parameter):
+    """
+    Wrapper class to allow either a List or Dict inside of a Parameterized object.
+    """
+
+    def _validate(self, val: Any) -> None:  # pragma: no cover
+        """Ensure a List or Dict has been used"""
+        if not (self.allow_None and val is None):
+            if not (isinstance(val, List) or isinstance(val, Dict)):
+                raise ValueError(f"{val} must be an instance of List or Dict, found {type(val)}")
+        super()._validate(val)
+
+
+class IntTuple(param.NumericTuple):
+    """
+    Parameter class that must always have integer values
+    """
+
+    def _validate(self, val: Any) -> None:
+        """Ensure a List or Dict has been used"""
+        super()._validate(val)
+        if val is not None:
+            for i, n in enumerate(val):
+                if not isinstance(n, int):
+                    raise ValueError(
+                        "{}: tuple element at index {} with value {} in {} is not an integer".format(
+                            self.name, i, n, val
+                        )
+                    )
+
+
+class GenericConfig(param.Parameterized):
+    """
+    Base class for all configuration classes provides helper functionality to create argparser.
+    """
+
+    def __init__(self, should_validate: bool = True, throw_if_unknown_param: bool = False, **params: Any):
+        """
+        Instantiates the config class, ignoring parameters that are not overridable.
+        :param should_validate: If True, the validate() method is called directly after init.
+        :param throw_if_unknown_param: If True, raise an error if the provided "params" contains any key that does not
+                                correspond to an attribute of the class.
+        :param params: Parameters to set.
+        """
+        # check if illegal arguments are passed in
+        legal_params = self.get_overridable_parameters()
+        illegal = [k for k, v in params.items() if (k in self.param.params().keys()) and (k not in legal_params)]
+
+        if illegal:  # pragma: no cover
+            raise ValueError(
+                f"The following parameters cannot be overriden as they are either "
+                f"readonly, constant, or private members : {illegal}"
+            )
+        if throw_if_unknown_param:  # pragma: no cover
+            # check if parameters not defined by the config class are passed in
+            unknown = [k for k, v in params.items() if (k not in self.param.params().keys())]
+            if unknown:
+                raise ValueError(f"The following parameters do not exist: {unknown}")
+        # set known arguments
+        super().__init__(**{k: v for k, v in params.items() if k in legal_params.keys()})
+        if should_validate:
+            self.validate()
+
+    def validate(self) -> None:
+        """
+        Validation method called directly after init to be overridden by children if required
+        """
+        pass
+
+    def add_and_validate(self, kwargs: Dict[str, Any], validate: bool = True) -> None:  # pragma: no cover
+        """
+        Add further parameters and, if validate is True, validate. We first try set_param, but that
+        fails when the parameter has a setter.
+        """
+        for key, value in kwargs.items():
+            try:
+                self.set_param(key, value)
+            except ValueError:
+                setattr(self, key, value)
+        if validate:
+            self.validate()
+
+    @classmethod
+    def create_argparser(cls: Type[GenericConfig]) -> argparse.ArgumentParser:
+        """
+        Creates an ArgumentParser with all fields of the given argparser that are overridable.
+        :return: ArgumentParser
+        """
+        parser = argparse.ArgumentParser()
+        cls.add_args(parser)
+
+        return parser
+
+    @classmethod
+    def add_args(cls: Type[GenericConfig], parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
+        """
+        Adds all overridable fields of the current class to the given argparser.
+        Fields that are marked as readonly, constant or private are ignored.
+        :param parser: Parser to add properties to.
+        """
+
+        def _get_basic_type(_p: param.Parameter) -> Union[type, Callable]:
+            """
+            Given a parameter, get its basic Python type, e.g.: param.Boolean -> bool.
+            Throw exception if it is not supported.
+            :param _p: parameter to get type and nargs for.
+            :return: Type
+            """
+            if isinstance(_p, param.Boolean):  # pragma: no cover
+                p_type: Union[type, Callable] = lambda x: (str(x).lower() == "true")  # noqa: E731
+            elif isinstance(_p, param.Integer):
+                p_type = lambda x: _p.default if x == "" else int(x)  # noqa: E731
+            elif isinstance(_p, param.Number):
+                p_type = lambda x: _p.default if x == "" else float(x)  # noqa: E731
+            elif isinstance(_p, param.String):
+                p_type = str
+            elif isinstance(_p, param.List):
+                p_type = lambda x: [_p.class_(item) for item in x.split(",")]  # type: ignore  # noqa: E731
+            elif isinstance(_p, param.NumericTuple):
+                float_or_int = lambda y: int(y) if isinstance(_p, IntTuple) else float(y)  # noqa: E731
+                p_type = lambda x: tuple([float_or_int(item) for item in x.split(",")])  # noqa: E731
+            elif isinstance(_p, param.ClassSelector):
+                p_type = _p.class_
+            elif isinstance(_p, ListOrDictParam):  # pragma: no cover
+
+                def list_or_dict(x: str) -> Union[Dict, List]:
+                    import json
+
+                    if x.startswith("{") or x.startswith("["):
+                        res = json.loads(x)
+                    else:
+                        res = [str(item) for item in x.split(",")]
+                    if isinstance(res, Dict):
+                        return res
+                    elif isinstance(res, List):
+                        return res
+                    else:
+                        raise ValueError(f"Parameter of type {_p} should resolve to List or Dict")
+
+                p_type = list_or_dict
+            else:
+                raise TypeError("Parameter of type: {} is not supported".format(_p))  # pragma: no cover
+
+            return p_type
+
+        for k, p in cls.get_overridable_parameters().items():
+            if isinstance(p, param.Boolean) and p.default is False:
+                # Boolean switches are specified without a "True" value.
+                parser.add_argument("--" + k, help=p.doc, action="store_true")
+            else:
+                parser.add_argument("--" + k, help=p.doc, type=_get_basic_type(p), default=p.default)
+
+        return parser
+
+    @classmethod
+    def parse_args(cls: Type[T], args: Optional[List[str]] = None) -> T:
+        """
+        Creates an argparser based on the params class and parses stdin args (or the args provided)
+        """
+        return cls(**vars(cls.create_argparser().parse_args(args)))  # type: ignore
+
+    @classmethod
+    def get_overridable_parameters(cls: Type[GenericConfig]) -> Dict[str, param.Parameter]:
+        """
+        Get properties that are not constant, readonly or private (eg: prefixed with an underscore).
+        :return: A dictionary of parameter names and their definitions.
+        """
+        return dict(
+            (k, v) for k, v in cls.param.params().items() if cls.reason_not_overridable(v) is None  # type: ignore
+        )
+
+    @staticmethod
+    def reason_not_overridable(value: param.Parameter) -> Optional[str]:
+        """
+        :param value: a parameter value
+        :return: None if the parameter is overridable; otherwise a one-word string explaining why not.
+        """
+        if value.readonly:
+            return "readonly"
+        elif value.constant:
+            return "constant"
+        elif value.name is not None and is_private_field_name(value.name):
+            return "private"
+        elif isinstance(value, param.Callable):  # pragma: no cover
+            return "callable"
+        return None
+
+    def apply_overrides(
+        self, values: Optional[Dict[str, Any]], should_validate: bool = True, keys_to_ignore: Optional[Set[str]] = None
+    ) -> Dict[str, Any]:
+        """
+        Applies the provided `values` overrides to the config.
+        Only properties that are marked as overridable are actually overwritten.
+
+        :param values: A dictionary mapping from field name to value.
+        :param should_validate: If true, run the .validate() method after applying overrides.
+        :param keys_to_ignore: keys to ignore in reporting failed overrides. If None, do not report.
+        :return: A dictionary with all the fields that were modified.
+        """
+
+        def _apply(_overrides: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+            applied: Dict[str, Any] = {}
+            if _overrides is not None:
+                overridable_parameters = self.get_overridable_parameters().keys()
+                for k, v in _overrides.items():
+                    if k in overridable_parameters:
+                        applied[k] = v
+                        setattr(self, k, v)
+
+            return applied
+
+        actual_overrides = _apply(values)
+        if keys_to_ignore is not None:  # pragma: no cover
+            self.report_on_overrides(values, keys_to_ignore)  # type: ignore
+        if should_validate:
+            self.validate()
+        return actual_overrides
+
+    def report_on_overrides(self, values: Dict[str, Any], keys_to_ignore: Set[str]) -> None:  # pragma: no cover
+        """
+        Logs a warning for every parameter whose value is not as given in "values", other than those
+        in keys_to_ignore.
+        :param values: override dictionary, parameter names to values
+        :param keys_to_ignore: set of dictionary keys not to report on
+        :return: None
+        """
+        for key, desired in values.items():
+            # If this isn't an AzureConfig instance, we don't want to warn on keys intended for it.
+            if key in keys_to_ignore:
+                continue
+            actual = getattr(self, key, None)
+            if actual == desired:
+                continue
+            if key not in self.param.params():
+                reason = "parameter is undefined"
+            else:
+                val = self.param.params()[key]
+                reason = self.reason_not_overridable(val)  # type: ignore
+                if reason is None:
+                    reason = "for UNKNOWN REASONS"
+                else:
+                    reason = f"parameter is {reason}"
+            # We could raise an error here instead - to be discussed.
+            logging.warning(f"Override {key}={desired} failed: {reason} in class {self.__class__.name}")
