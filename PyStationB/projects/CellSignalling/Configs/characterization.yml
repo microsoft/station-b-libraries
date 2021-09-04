@@ -1,0 +1,15 @@
+signals:
+  EYFP:
+    color: yellow
+  ECFP:
+    color: blue
+  OD:
+    color: black
+  mRFP1:
+    color: red
+
+integration:
+  t_min: 0.0
+  t_max: 18.0
+
+growth_signal: OD

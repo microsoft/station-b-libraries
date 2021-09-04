@@ -1,0 +1,18 @@
+signals:
+  signal1: C6HSL
+  signal2: C12HSL
+  units: nM
+  signal_merged: Con
+
+inputs:
+  - name: Arabinose
+    units: mM
+  - name: ATC
+    units: ng/ml
+
+outputs:
+  output1: ECFP
+  output2: EYFP
+
+pairing: ObservationID
+objective: Objective

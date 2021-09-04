@@ -1,0 +1,5 @@
+name: Three-input Cell
+objective_column: Crosstalk Ratio
+folder: CellSignalling/Data/SimulatedCellSignalling-3inputs
+init_data_files: [init_random_design_data.csv]
+batches_in_lexic_order: True

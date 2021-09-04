@@ -1,0 +1,91 @@
+bayesopt:
+  acquisition: EXPECTED_IMPROVEMENT
+  acquisition_optimizer: Random
+  batch: 10
+  batch_strategy: LocalPenalization
+  context: {}
+  lipschitz_constant: null
+  nonmyopic_batch: false
+  num_anchors: 10
+  num_samples: 100000
+data:
+  categorical_filters: {}
+  categorical_inputs: []
+  config_file_location: null
+  default_conditions: {}
+  devices: {}
+  files: {}
+  folder: Experiments/hmc_local_penalization/Data/ABEX-Inputs
+  inputs:
+    ATC:
+      default_condition: null
+      drop_if_nan: false
+      drop_if_outside_bounds: false
+      final_offset: 0.0
+      log_transform: true
+      lower_bound: 0.25
+      normalise: MaxOnly
+      offset: 0.0
+      rescale_column: null
+      unit: ng/ml
+      upper_bound: 5000.0
+    Arabinose:
+      default_condition: null
+      drop_if_nan: false
+      drop_if_outside_bounds: false
+      final_offset: 0.0
+      log_transform: true
+      lower_bound: 0.01
+      normalise: MaxOnly
+      offset: 0.0
+      rescale_column: null
+      unit: mM
+      upper_bound: 200.0
+    Con:
+      default_condition: null
+      drop_if_nan: false
+      drop_if_outside_bounds: false
+      final_offset: 0.0
+      log_transform: true
+      lower_bound: 1.0
+      normalise: MaxOnly
+      offset: 0.0
+      rescale_column: null
+      unit: nM
+      upper_bound: 20000.0
+  num_batches_left: null
+  original_folder: tests/data/Data
+  output_column: Objective
+  output_settings:
+    final_offset: 0.0
+    log_transform: true
+    normalise: MaxOnly
+    offset: 0.0
+    rescale_column: null
+    unit: null
+  zero: 1.0
+init_design_strategy: Random
+model:
+  add_bias: true
+  anisotropic_lengthscale: false
+  fixed_hyperparameters: {}
+  kernel: Matern
+  priors: {}
+num_init_points: null
+optimization_strategy: Bayesian
+resolution_spec: ''
+results_dir: This value is overwritten at each iteration. You don't need to modify
+  it.
+seed: null
+training:
+  compute_optima: true
+  hmc: true
+  iterations: 50
+  num_folds: 0
+  optim_method: SLSQP
+  optim_samples: 25
+  plot_binned_slices: null
+  plot_slice1d: false
+  plot_slice2d: false
+  slice_cols: null
+zoomopt: null
