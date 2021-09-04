@@ -1,0 +1,7 @@
+name: Four-input Cell
+objective_column: Crosstalk Ratio
+folder: CellSignalling/Data/SimulatedCellSignalling-4inputs
+init_data_files: [init_random_design_data.csv]
+# Rather than specify a file for each batch, take all files in the folder and assume that consecutive files
+# as arranged lexicographically correspond to consecutive batches
+batches_in_lexic_order: True

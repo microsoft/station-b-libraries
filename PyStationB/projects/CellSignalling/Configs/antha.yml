@@ -1,0 +1,5 @@
+# *** Antha DoE Configuration file, specifying column naming convention ***
+# This file is used to create a new AnthaConfig.
+
+concentration_column_format: "{} ({})"  # E.g. "C6HSL (nM)"
+tag_column_format: "{}"  # E.g. "tag:SampleTag:ObservationID"

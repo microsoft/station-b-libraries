@@ -1,0 +1,40 @@
+## Configuration file for the synthetic cell experiment in space Ara/ATC/C_on. (We have C6_on := C12_on := C_on).
+data:
+  folder: "CellSignalling/Data/SimulatedCellSignalling-3inputs"
+  inputs:
+    "Ara":  # mM
+      unit: mM
+      log_transform: True
+      lower_bound: 0.001
+      upper_bound: 20.0
+      normalise: Full
+    "ATC":  # ng/ml
+      unit: ng/ml
+      log_transform: True
+      lower_bound: 0.025
+      upper_bound: 500.0
+      normalise: Full
+    "C_on":  # nM
+      unit: nM
+      log_transform: True
+      lower_bound: 1.0
+      upper_bound: 20000.0
+      normalise: Full
+  output_column: "Crosstalk Ratio"
+  output_settings:
+    log_transform: True
+    normalise: Full
+
+model:
+  kernel: RBF
+  add_bias: True
+
+training:
+  num_folds: 3
+  iterations: 100
+  upper_bound: 1
+  plot_slice1d: True
+  plot_slice2d: True
+
+bayesopt:
+  batch: 30

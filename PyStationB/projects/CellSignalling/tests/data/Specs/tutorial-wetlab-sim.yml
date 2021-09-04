@@ -1,0 +1,68 @@
+bayesopt:
+  acquisition: MEAN_PLUGIN_EXPECTED_IMPROVEMENT  # Important to use mean-plugin to account for the noise
+  batch_strategy: MomentMatchedEI  # Moment-matched EI is the batch acquisition strategy developed by us
+  acquisition_optimizer: Random  # Currently only Random is supported for MomentMatchedEI batch strategy
+  batch: 10  # Size of the batch
+  num_samples: 50000  # Number of random samples to evaluate the acquisition function at. Keep > 30000 if acquisition_optimizer is Random
+data:
+  folder: CellSignalling/Data/LaboratoryExperiment  # Adjust adequately. No need to specify files!
+  inputs:
+    ATC:
+      log_transform: true
+      lower_bound: 0.0001  # Note the different bounds!
+      upper_bound: 100.0
+      normalise: Full
+    Ara:
+      log_transform: true
+      lower_bound: 0.0001
+      upper_bound: 100.0
+      normalise: Full
+    C_on:
+      log_transform: true
+      lower_bound: 0.01
+      upper_bound: 25000.0
+      normalise: Full
+  output_column: "Crosstalk Ratio"  # Different output column to wetlab!
+  output_settings:
+    log_transform: true
+    normalise: None  # Do not normalise output, as this will effectively change the effect of priors at each iteration
+model:
+  add_bias: true  # Setting to True helps with exploration
+  anisotropic_lengthscale: False  # We saw little benefit on the simulators of setting to True
+  kernel: Matern  # Matern generally recommended above RBF for Bayesian Optimization
+  priors:
+    sum.Mat52.variance:
+      distribution: InverseGamma
+      parameters: {a: 1.0, b: 1.0}
+    sum.Mat52.lengthscale:
+      distribution: InverseGamma
+      parameters: {a: 3.0, b: 1.0}
+    sum.bias.variance:
+      distribution: InverseGamma
+      parameters: {a: 2.0, b: 1.0}
+    Gaussian_noise.variance:
+      distribution: InverseGamma
+      parameters: {a: 5.0, b: 1.0}
+optimization_strategy: Bayesian
+training:
+  compute_optima: true  # Keep as True if you want to inspect the inferred optima at each iteration. Also required for plotting
+  hmc: False  # TODO! Currently HMC doesn't work
+  iterations: 100
+  num_folds: 4  # Number of cross-validation fold, only affects plots made
+  plot_slice1d: true
+  plot_slice2d: true
+  plot_binned_slices:  # Helpful for visualising the acquired points
+    dim_x: 2
+    slice_dim1: 0
+    slice_dim2: 1
+    num_bins: 5
+results_dir: Results/tutorial-wetlab-sim
+
+# Simulator specific options (only keep if running run_cell_signalling_loop.py)
+
+init_design_strategy: Random
+multimodal: True  # Keep as True, otherwise the simulator is quite boring and all methods converge really quickly
+simulator_noise: 1.0
+num_init_points: 10
+incorporate_growth: False  # Keep False, the growth model used is unrealistic
+heteroscedastic_noise: False  # Whether the simulator should generate samples with heteroscedastic noise

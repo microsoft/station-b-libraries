@@ -1,0 +1,10 @@
+[run]
+parallel = true
+source =
+    cellsig_pipeline
+    cellsig_sim
+
+[report]
+show_missing = true
+precision = 2
+fail_under = 100.00
