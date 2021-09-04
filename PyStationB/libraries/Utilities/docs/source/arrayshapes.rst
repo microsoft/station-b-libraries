@@ -179,10 +179,10 @@ The output from this would be something like:
 
 .. code-block:: text
 
-    /path-to-repo/station-b-libraries/python/libraries/Utilities/tmp.py:27: 3 constraints from 5 sets of bindings
-    /path-to-repo/station-b-libraries/python/libraries/Utilities/tmp.py:27: dims(YY)=dims(XX)
-    /path-to-repo/station-b-libraries/python/libraries/Utilities/tmp.py:27: first(YY)=first(XX)/2
-    /path-to-repo/station-b-libraries/python/libraries/Utilities/tmp.py:27: prod(YY)=prod(XX)/2
+    /path-to-repo/station-b-libraries/PyStationB/libraries/Utilities/tmp.py:27: 3 constraints from 5 sets of bindings
+    /path-to-repo/station-b-libraries/PyStationB/libraries/Utilities/tmp.py:27: dims(YY)=dims(XX)
+    /path-to-repo/station-b-libraries/PyStationB/libraries/Utilities/tmp.py:27: first(YY)=first(XX)/2
+    /path-to-repo/station-b-libraries/PyStationB/libraries/Utilities/tmp.py:27: prod(YY)=prod(XX)/2
 
 The "``...tmp.py:27:``" prefix identifies the ``Shapes`` call to which the constraints refer; inference 
 will be performed on each distinct ``Shapes`` call that has been made, although in this example there 
@@ -208,7 +208,7 @@ If we do this and re-run the code, we get:
 
 .. code-block:: text
 
-    /path-to-repo/station-b-libraries/python/libraries/Utilities/tmp.py:27: 0 constraints from 5 sets of bindings
+    /path-to-repo/station-b-libraries/PyStationB/libraries/Utilities/tmp.py:27: 0 constraints from 5 sets of bindings
 
 which means there were still 5 successful calls (we did not break anything by assuming equal values of ``AA`` in
 both places and a halving of the first dimension) and that no further constraints could be derived. In other words, 
