@@ -1,0 +1,6 @@
+group NETSTANDARD
+
+FSharp.Core
+WindowsAzure.Storage
+TaskBuilder.fs
+Thoth.Json.Net

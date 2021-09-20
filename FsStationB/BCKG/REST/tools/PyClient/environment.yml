@@ -1,0 +1,7 @@
+name: bckggen
+channels:
+  - defaults
+dependencies:
+  - click
+  - pip:
+    - openapi-parser

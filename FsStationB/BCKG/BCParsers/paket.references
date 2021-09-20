@@ -1,0 +1,6 @@
+﻿group DOTNETCORE
+FSharp.Core
+
+group NETSTANDARD
+
+FParsec
