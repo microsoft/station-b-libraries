@@ -1,3 +1,7 @@
+// -------------------------------------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+// -------------------------------------------------------------------------------------------
 module BCKG.Test.RunTests
 
 open BCKG.Test.Entities
@@ -252,14 +256,14 @@ let runPartTests (rest:RestAPI) =
     let _ = rest.modifyPart (Entities.restrictionsite1) (RequestType.POST)
     printfn "Finished adding parts"
     printfn "==========================================================="
-    let cp = checkPart rest 
+    let cp = checkPart rest
     cp Entities.promoter1
     cp Entities.promoter2
-    cp Entities.rbs1    
-    cp Entities.cds1    
-    cp Entities.cds2    
-    cp Entities.terminator1    
-    cp Entities.backbone1    
+    cp Entities.rbs1
+    cp Entities.cds1
+    cp Entities.cds2
+    cp Entities.terminator1
+    cp Entities.backbone1
     cp Entities.ori1
     cp Entities.scar1
     cp Entities.scar2
@@ -354,7 +358,7 @@ let runCellTests (rest:RestAPI) =
     checkCellEntities rest cell1.id [|Entities.cell1Entity0; Entities.cell1Entity1|]
     printfn "Removing 1 Cell Entity:"
     let _ = rest.updateCellEntities cell1.id [|Entities.cell1Entity0|] AddRemoveType.REMOVE
-    checkCellEntities rest cell1.id [|Entities.cell1Entity1|]    
+    checkCellEntities rest cell1.id [|Entities.cell1Entity1|]
     printfn "===========================================================\n"
 
 let runExperimentTests (rest:RestAPI) =
@@ -419,7 +423,7 @@ let runSampleTests (rest:RestAPI) =
         let _ = rest.updateSampleConditions sid conditions AddRemoveType.ADD
         checkSampleConditions rest sid conditions)
     printfn "==========================================================="
-    
+
     printfn "Adding Sample Devices"
     Entities.sample_devices
     |> Array.iter (fun (sid,device) ->

@@ -1,4 +1,8 @@
-﻿namespace BCKG.Domain
+﻿// -------------------------------------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+// -------------------------------------------------------------------------------------------
+namespace BCKG.Domain
 
 open System
 #if FABLE_COMPILER

@@ -1,3 +1,7 @@
+// -------------------------------------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+// -------------------------------------------------------------------------------------------
 module BCKG_REST_Server.Server.StorageUtils
 
 open BCKG.Events
@@ -75,7 +79,7 @@ let unpackAsyncList<'A,'B,'C> (fn:'A->'B->Async<'C>) =
         |> ignore
 }
 
-let processPart (db:BCKG.API.Instance) (guid:System.Guid, part:BCKG.Domain.Part) (request:RequestType) =    
+let processPart (db:BCKG.API.Instance) (guid:System.Guid, part:BCKG.Domain.Part) (request:RequestType) =
     async{
         match guid.ToString() = part.id.ToString() with
         | true ->
@@ -87,12 +91,12 @@ let processPart (db:BCKG.API.Instance) (guid:System.Guid, part:BCKG.Domain.Part)
                 return ()
             | Some(x), RequestType.PATCH  ->
                 let! res = db.SavePart part
-                return ()        
+                return ()
             | None, RequestType.PATCH -> return failwithf "Part with ID %s does not exist in BCKG." (part.id.ToString())
         | false -> return failwithf "GUID provided in the URL %s does not match the GUID provided in the Entity %s" (guid.ToString()) (part.id.ToString())
     }
 
-let processReagent (db:BCKG.API.Instance) (guid:System.Guid, reagent:BCKG.Domain.Reagent) (request:RequestType) =    
+let processReagent (db:BCKG.API.Instance) (guid:System.Guid, reagent:BCKG.Domain.Reagent) (request:RequestType) =
     async{
         match guid.ToString() = reagent.id.ToString() with
         | true ->
@@ -104,12 +108,12 @@ let processReagent (db:BCKG.API.Instance) (guid:System.Guid, reagent:BCKG.Domain
                 return ()
             | Some(x), RequestType.PATCH  ->
                 let! res = db.SaveReagent reagent
-                return ()        
+                return ()
             | None, RequestType.PATCH -> return failwithf "Reagent with ID %s does not exist in BCKG." (reagent.id.ToString())
         | false -> return failwithf "GUID provided in the URL %s does not match the GUID provided in the Entity %s" (guid.ToString()) (reagent.id.ToString())
     }
 
-let processCell (db:BCKG.API.Instance) (guid:System.Guid, cell:BCKG.Domain.Cell) (request:RequestType) =    
+let processCell (db:BCKG.API.Instance) (guid:System.Guid, cell:BCKG.Domain.Cell) (request:RequestType) =
     async{
         match guid.ToString() = cell.id.ToString() with
         | true ->
@@ -121,12 +125,12 @@ let processCell (db:BCKG.API.Instance) (guid:System.Guid, cell:BCKG.Domain.Cell)
                 return ()
             | Some(x), RequestType.PATCH  ->
                 let! res = db.SaveCell cell
-                return ()        
+                return ()
             | None, RequestType.PATCH -> return failwithf "Cell with ID %s does not exist in BCKG." (cell.id.ToString())
         | false -> return failwithf "GUID provided in the URL %s does not match the GUID provided in the Entity %s" (guid.ToString()) (cell.id.ToString())
     }
 
-let processExperiment (db:BCKG.API.Instance) (guid:System.Guid, expt:BCKG.Domain.Experiment) (request:RequestType) =    
+let processExperiment (db:BCKG.API.Instance) (guid:System.Guid, expt:BCKG.Domain.Experiment) (request:RequestType) =
     async{
         match guid.ToString() = expt.id.ToString() with
         | true ->
@@ -138,7 +142,7 @@ let processExperiment (db:BCKG.API.Instance) (guid:System.Guid, expt:BCKG.Domain
                 return ()
             | Some(x), RequestType.PATCH  ->
                 let! res = db.SaveExperiment expt
-                return ()        
+                return ()
             | None, RequestType.PATCH -> return failwithf "Experiment with ID %s does not exist in BCKG." (expt.id.ToString())
         | false -> return failwithf "GUID provided in the URL %s does not match the GUID provided in the Entity %s" (guid.ToString()) (expt.id.ToString())
     }
@@ -153,7 +157,7 @@ let processExperimentOperation (db:BCKG.API.Instance) (experimentId:BCKG.Domain.
             let! res = db.RemoveExperimentOperation experimentId op
             return ()
     }
-    
+
 
 let processTagEvent (db:BCKG.API.Instance) (entityId:EventsProcessor.TagSourceId, tags:string[]) (request:AddRemoveType)=
     let tags_array = tags |> Array.map (fun x -> BCKG.Domain.Tag x)

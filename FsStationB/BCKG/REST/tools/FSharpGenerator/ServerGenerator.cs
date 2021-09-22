@@ -1,3 +1,7 @@
+// -------------------------------------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+// -------------------------------------------------------------------------------------------
 using Microsoft.OpenApi.Models;
 using SharpYaml.Schemas;
 using System;
@@ -49,14 +53,14 @@ open BCKG_REST_Server.Shared.Shared
 open BCKG_REST_Server.Server.StorageUtils
 
 let getServer (userId:string) (connectionString:string) : IBCKGApi =
-    let connectionSettings = 
+    let connectionSettings =
         connectionString.Split ';'
         |> Array.map (fun x -> x.Trim())
         |> Array.filter ((<>) """")
-        |> Array.map(fun opt -> 
+        |> Array.map(fun opt ->
             let fields = opt.Split '='
-            fields.[0], fields.[1]) 
-        |> Map.ofArray    
+            fields.[0], fields.[1])
+        |> Map.ofArray
 
     printfn ""Using connection settings: %A"" connectionString
     let db = BCKG.API.Instance(BCKG.API.InstanceType.CloudInstance(connectionString), userId)
@@ -90,7 +94,7 @@ type BCKGApiConfig(connectionString:string) =
             ["getPartsScarGuidAPI"] = "unpack1ReturnOption (fun e -> db.TryGetPart (e |> ScarId |> ScarPartId))",
             ["getPartsLinkerGuidAPI"] = "unpack1ReturnOption (fun e -> db.TryGetPart (e |> LinkerId |> LinkerPartId))",
             ["getPartsRestrictionsiteGuidAPI"] = "unpack1ReturnOption (fun e -> db.TryGetPart (e |> RestrictionSiteId |> RestrictionSitePartId))",
-            
+
             //REAGENT ENDPOINTS
             //DNA
             ["getReagentsDnaGuidAPI"] = "unpack1ReturnOption (fun e -> db.TryGetReagent (e |> DNAId |> DNAReagentId))",

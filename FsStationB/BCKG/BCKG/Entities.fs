@@ -1,4 +1,8 @@
-﻿module BCKG.Entities
+﻿// -------------------------------------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+// -------------------------------------------------------------------------------------------
+module BCKG.Entities
 open BCKG.Domain
 open BCKG.Events
 open Microsoft.WindowsAzure.Storage.Table

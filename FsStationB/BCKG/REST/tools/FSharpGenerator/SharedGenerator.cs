@@ -1,3 +1,7 @@
+// -------------------------------------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+// -------------------------------------------------------------------------------------------
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
@@ -30,10 +34,10 @@ module BCKG_REST_Server.Shared.Shared
 open System
 open BCKG.Domain
 
-let guidFromString (x:string) : Option<Guid> = 
-    try 
+let guidFromString (x:string) : Option<Guid> =
+    try
         Some (System.Guid.Parse x)
-    with 
+    with
         | _  -> None
 
 let guidToString (g:Guid) : string = g.ToString()
@@ -98,7 +102,7 @@ module Encoders =
             ["getReagentsRnaGuidAPI"] = "Async<Reagent>",
             ["getReagentsProteinGuidAPI"] = "Async<Reagent>",
             ["getReagentsChemicalGuidAPI"] = "Async<Reagent>",
-            ["getReagentsGenericentityGuidAPI"] = "Async<Reagent>",            
+            ["getReagentsGenericentityGuidAPI"] = "Async<Reagent>",
         };
 
         private static readonly Dictionary<string, string> KnownCodecMappings = new Dictionary<string, string>()
@@ -189,7 +193,7 @@ module Encoders =
                             if (KnownResponseMappings.ContainsKey(f.APIPath))
                             {
                                 formattedResponseType = KnownResponseMappings[f.APIPath];
-                                
+
                             }
                             if (op.Key == OperationType.Get || !string.IsNullOrWhiteSpace(f.FormattedParameterNames))
                             {
@@ -198,7 +202,7 @@ module Encoders =
                                 var requestBodyName = string.IsNullOrEmpty(f.FormattedRequestBodyName) ? string.Empty : string.Format("-> {0} ", f.FormattedRequestBodyName);
                                 var requestBodyType = string.IsNullOrEmpty(formattedRequestBodyType) ? string.Empty : string.Format("-> {0} ", formattedRequestBodyType);
 
-                                
+
                                 writer.WriteLine(
                                     string.Format("    //{0} : {1} {2}-> {3}",
                                     f.APIPath,
@@ -263,7 +267,7 @@ module Encoders =
                         {
                             if (KnownCodecMappings.ContainsKey(codecNames.DecoderFunctionName))
                             {
-                                var line = 
+                                var line =
                                     string.Format(
                                         "    let {0} : Decoder<{1}> = {2}",
                                         codecNames.DecoderFunctionName,
@@ -279,7 +283,7 @@ module Encoders =
                                        codecNames.DecoderFunctionName,
                                        schemaTypeName);
                                 decoderLineMaps[codecNames.DecoderFunctionName] = line;
-                            }                            
+                            }
                         }
                         else
                         {
@@ -345,8 +349,8 @@ module Encoders =
                                     schemaTypeName);
                                 encoderLineMaps[codecNames.EncoderFunctionName] = line;
                             }
-                            
-                            
+
+
                         }
                         else
                         {
@@ -371,7 +375,7 @@ module Encoders =
                                 schemaTypeName,
                                 codecNames.InstanceName);
                         setLineMaps[codecNames.SetFunctionName] = line;
-                        
+
                     }
                     foreach (var key in encoderLineMaps.Keys)
                     {

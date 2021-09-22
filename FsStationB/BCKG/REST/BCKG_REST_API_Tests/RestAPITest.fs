@@ -1,3 +1,7 @@
+// -------------------------------------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+// -------------------------------------------------------------------------------------------
 module BCKG.Test.APITests
 
 open BCKG.Test.Entities
@@ -22,8 +26,8 @@ type RestAPI(endpoint:string) =
         FSharp.Data.Http.RequestString
             (url,
             httpMethod = "GET",
-            headers = 
-              [ 
+            headers =
+              [
                   Accept FSharp.Data.HttpContentTypes.Json
               ]) |> FSharp.Data.JsonValue.Parse
 
@@ -101,7 +105,7 @@ type RestAPI(endpoint:string) =
     member this.getExperiment (expt_id:ExperimentId) =
         let rest_uri = this.endpoint + "api/experiments/" + expt_id.ToString()
         get_entity (Decode.fromString Experiment.decode ((this.get_request rest_uri).ToString()))
- 
+
     member this.modifyExperiment (expt:Experiment) (modifyType:RequestType) =
         let rest_uri = this.endpoint + "api/experiments/" + (expt.id.ToString())
         match modifyType with

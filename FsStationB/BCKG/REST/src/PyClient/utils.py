@@ -1,3 +1,7 @@
+# -------------------------------------------------------------------------------------------
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+# -------------------------------------------------------------------------------------------
 from dataclasses_json.api import DataClassJsonMixin
 from datetime import date
 from datetime import datetime
@@ -25,7 +29,7 @@ def discriminator_decoder(discriminator_key: str, mappings: Dict[str, Type[T]], 
             raise UnregisteredDiscriminatorTypeError(f"Discriminator field '{discriminator_key}' has invalid value '{data[discriminator_key]}'")
         else:
             return mappings[data[discriminator_key]].from_dict(data)
-    
+
     if (default_factory is not None):
         def safe_decoder(data: Dict[str, Any]) -> Optional[T]:
             try:
@@ -36,10 +40,10 @@ def discriminator_decoder(discriminator_key: str, mappings: Dict[str, Type[T]], 
                 else:
                     return default_factory()
         result = safe_decoder
-    
+
     else:
         result = decoder
-    
+
     return result
 
 def datetime_decoder(cls: Type[DT]) -> Callable[[str], DT]:

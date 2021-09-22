@@ -1,3 +1,7 @@
+// -------------------------------------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+// -------------------------------------------------------------------------------------------
 module BCKG.Test.Entities
 
 open BCKG.Domain
@@ -12,7 +16,7 @@ let get_entity (res:Result<'A,string>) : 'A =
 
 let getRandomInt (min,max) = System.Random().Next(min,max)
 let getRandomValue =
-    let a = System.Random().NextDouble() 
+    let a = System.Random().NextDouble()
     let x = getRandomInt(0,10000) |> float
     a * x
 
