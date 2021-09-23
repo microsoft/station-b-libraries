@@ -22,16 +22,16 @@ jobs:
     
     - name: Build BCKG
       shell: cmd
-      run: msbuild FsStationB/BCKG/BCKG.sln /p:Configuration=Release /p:Platform=x64 /restore
+      run: msbuild FsStationB/BCKG/BCKG.sln /p:Configuration=Release /p:Platform="Any CPU" /restore
     
     - name: Build BCKG REST
       shell: cmd
-      run: msbuild FsStationB/BCKG/REST/BCKG_REST_Server.sln /p:Configuration=Release /p:Platform=x64 /restore
+      run: msbuild FsStationB/BCKG/REST/BCKG_REST_Server.sln /p:Configuration=Release /p:Platform="Any CPU" /restore
     
     - name: Build FSTL
       shell: cmd
-      run: msbuild FsStationB/FSTL/FSTL.sln /p:Configuration=Release /p:Platform=x64 /restore
+      run: msbuild FsStationB/FSTL/FSTL.sln /p:Configuration=Release /p:Platform="Any CPU" /restore
     
     - name: Build Plate Reader Loader
       shell: cmd
-      run: msbuild FsStationB/PlateReaderLoader/PlateReaderLoader.sln /p:Configuration=Release /p:Platform=x64 /restore
+      run: msbuild FsStationB/PlateReaderLoader/PlateReaderLoader.sln /p:Configuration=Release /p:Platform="Any CPU" /restore
