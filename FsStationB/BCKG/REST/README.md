@@ -43,8 +43,8 @@ You will find more documentation about the used F# components at the following p
 
 Test links:
 
-* [Cell] (http://localhost:8085/api/cells/0a95f93f-31bc-4fbf-962d-aeb172e8a317)
-* [Sample Conditions] (http://localhost:8085/api/samples/0002d7dc-ada4-4855-8f9b-babae9a8164a/conditions)
+* [Cell](http://localhost:8085/api/cells/CELL_ID)
+* [Sample Conditions](http://localhost:8085/api/samples/SAMPLE_ID/conditions)
 
 To run the server against a local storage edit build.fsx:
 
