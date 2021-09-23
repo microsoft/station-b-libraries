@@ -1,0 +1,8 @@
+﻿group DOTNETCORE
+
+	FSharp.Core
+	Argu
+	Microsoft.Azure.Storage.DataMovement
+	WindowsAzure.Storage
+	Thoth.Json.Net
+	FSharp.Data

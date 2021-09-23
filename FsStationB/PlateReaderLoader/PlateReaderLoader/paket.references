@@ -1,0 +1,9 @@
+group DOTNETCORE
+
+FSharp.Core
+Argu
+TaskBuilder.fs
+
+group NETSTANDARD
+
+FParsec

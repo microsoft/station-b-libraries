@@ -1,0 +1,237 @@
+Testname: cfpyfprfp
+Date: 01/02/2018  Time: 19:06:52
+ID1: 01/02/2018  ID2: Wizard script `cfpyfprfp char`  ID3: unmerged
+No. of Channels / Multichromatics: 3
+No. of Cycles: 1
+Configuration: Fluorescence
+Used filters (excitation/emission) and gain values:
+  1: 430-10/480-10   1500
+  2: 500-10/530      1200
+  3: 550-10/610-20   1200
+  4: -               
+  5: -               
+  6: -               
+  7: -               
+  8: -               
+
+
+Basic Parameters
+================
+Mode: Plate mode
+Pause before cycle: 0
+Pause duration [s]: 0
+Microplate: GREINER 96 F-BOTTOM
+Settling time [s]: 0.2
+Well scanning: Orbital averaging
+Scan diameter [mm]: 3
+Optic: Bottom
+Comment: 
+
+
+Kinetic Windows
+===============
+Number of kinetic windows: 1
+
+Kinetic window:                 1      2      3      4
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+ Number of cycles:              1      -      -      -      
+ Measurement start time [s]:    0      -      -      -      
+ Number of flashes:             10     -      -      -      
+ Cycle time [s]:                -1     -      -      -      
+
+
+Layout
+======
+Plate format: 96
+Reading direction: 1
+(horizontal bidirectional reading, start top left)
+
+      1     2     3     4     5     6     7     8     9     10    11    12   
+   |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|
+ A |  X1    X2    X3    X4    X5    X6    X7    X8    X9    X10   X11   X12  |
+ B |  X13   X14   X15   X16   X17   X18   X19   X20   X21   X22   X23   X24  |
+ C |  X25   X26   X27   X28   X29   X30   X31   X32   X33   X34   X35   X36  |
+ D |  X37   X38   X39   X40   X41   X42   X43   X44   X45   X46   X47   X48  |
+ E |  X49   X50   X51   X52   X53   X54   X55   X56   X57   X58   X59   X60  |
+ F |  X61   X62   X63   X64   X65   X66   X67   X68   X69   X70   X71   X72  |
+ G |  X73   X74   X75   X76   X77   X78   X79   X80   X81   X82   X83   X84  |
+ H |  X85   X86   X87   X88   X89   X90   X91   X92   X93   X94   X95   X96  |
+   |_________________________________________________________________________|
+
+
+Concentrations/Injections/Shaking
+=================================
+
+Well     Concentration  Dilution  Injection Volume [µl]
+Content                 Factor    1       2       3       4
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+ X1      -              1         0       0       0       0
+ X10     -              1         0       0       0       0
+ X11     -              1         0       0       0       0
+ X12     -              1         0       0       0       0
+ X13     -              1         0       0       0       0
+ X14     -              1         0       0       0       0
+ X15     -              1         0       0       0       0
+ X16     -              1         0       0       0       0
+ X17     -              1         0       0       0       0
+ X18     -              1         0       0       0       0
+ X19     -              1         0       0       0       0
+ X2      -              1         0       0       0       0
+ X20     -              1         0       0       0       0
+ X21     -              1         0       0       0       0
+ X22     -              1         0       0       0       0
+ X23     -              1         0       0       0       0
+ X24     -              1         0       0       0       0
+ X25     -              1         0       0       0       0
+ X26     -              1         0       0       0       0
+ X27     -              1         0       0       0       0
+ X28     -              1         0       0       0       0
+ X29     -              1         0       0       0       0
+ X3      -              1         0       0       0       0
+ X30     -              1         0       0       0       0
+ X31     -              1         0       0       0       0
+ X32     -              1         0       0       0       0
+ X33     -              1         0       0       0       0
+ X34     -              1         0       0       0       0
+ X35     -              1         0       0       0       0
+ X36     -              1         0       0       0       0
+ X37     -              1         0       0       0       0
+ X38     -              1         0       0       0       0
+ X39     -              1         0       0       0       0
+ X4      -              1         0       0       0       0
+ X40     -              1         0       0       0       0
+ X41     -              1         0       0       0       0
+ X42     -              1         0       0       0       0
+ X43     -              1         0       0       0       0
+ X44     -              1         0       0       0       0
+ X45     -              1         0       0       0       0
+ X46     -              1         0       0       0       0
+ X47     -              1         0       0       0       0
+ X48     -              1         0       0       0       0
+ X49     -              1         0       0       0       0
+ X5      -              1         0       0       0       0
+ X50     -              1         0       0       0       0
+ X51     -              1         0       0       0       0
+ X52     -              1         0       0       0       0
+ X53     -              1         0       0       0       0
+ X54     -              1         0       0       0       0
+ X55     -              1         0       0       0       0
+ X56     -              1         0       0       0       0
+ X57     -              1         0       0       0       0
+ X58     -              1         0       0       0       0
+ X59     -              1         0       0       0       0
+ X6      -              1         0       0       0       0
+ X60     -              1         0       0       0       0
+ X61     -              1         0       0       0       0
+ X62     -              1         0       0       0       0
+ X63     -              1         0       0       0       0
+ X64     -              1         0       0       0       0
+ X65     -              1         0       0       0       0
+ X66     -              1         0       0       0       0
+ X67     -              1         0       0       0       0
+ X68     -              1         0       0       0       0
+ X69     -              1         0       0       0       0
+ X7      -              1         0       0       0       0
+ X70     -              1         0       0       0       0
+ X71     -              1         0       0       0       0
+ X72     -              1         0       0       0       0
+ X73     -              1         0       0       0       0
+ X74     -              1         0       0       0       0
+ X75     -              1         0       0       0       0
+ X76     -              1         0       0       0       0
+ X77     -              1         0       0       0       0
+ X78     -              1         0       0       0       0
+ X79     -              1         0       0       0       0
+ X8      -              1         0       0       0       0
+ X80     -              1         0       0       0       0
+ X81     -              1         0       0       0       0
+ X82     -              1         0       0       0       0
+ X83     -              1         0       0       0       0
+ X84     -              1         0       0       0       0
+ X85     -              1         0       0       0       0
+ X86     -              1         0       0       0       0
+ X87     -              1         0       0       0       0
+ X88     -              1         0       0       0       0
+ X89     -              1         0       0       0       0
+ X9      -              1         0       0       0       0
+ X90     -              1         0       0       0       0
+ X91     -              1         0       0       0       0
+ X92     -              1         0       0       0       0
+ X93     -              1         0       0       0       0
+ X94     -              1         0       0       0       0
+ X95     -              1         0       0       0       0
+ X96     -              1         0       0       0       0
+Used pump:                        -       -       -       -       
+Pump speed [µl/s]:                -       -       -       -       
+Smart dispensing used:            -       -       -       -       
+Pump syringe volume [ml]:         -       -       -       -       
+Injection cycle:                  -       -       -       -       
+Injection start time [s]:         -       -       -       -       
+Shaking time (after inj.) [s]:    -       -       -       -       
+
+Shaking mode: Orbital
+Shaking frequency [rpm]: 200
+Additional shaking: Before each cycle
+Time for additional shaking [s]: 10
+Idle movement mode: None
+Idle movement frequency: -
+Idle movement on/off time [s]: -
+Equidistant kinetic cycles: on
+
+Concentration unit: 
+
+
+Used Versions/Reader, User Name
+===============================
+Omega software version (control part): 5.10 R2
+Firmware version: 1.43
+Reader type: FLUOstar Omega
+Reader serial number: 415-1956
+Windows user: WetLab
+BMG user: USER
+Target temperature: 37°C
+Required value used for gain adjustment [%]: 0
+
+
+Measurement Data
+================
+
+Chromatic: 1
+Cycle: 1
+Time [s]: 0
+T[°C]: 37.0
+    1046,     1052,      995,     1003,     1004,     1035,     1031,     1042,     1046,     1006,     1026,     1036
+    1056,     3226,     3209,     3175,     3170,     3178,     3198,    13040,    12992,    13010,    13094,     1059
+    1077,     3289,     3200,     3169,     3126,     3147,     3254,    13154,    12782,    12949,    12916,     1027
+    1049,     3315,     3221,     3218,     3249,     3243,     3151,    12942,    13045,    12870,    13067,     1002
+    1017,     3151,     3163,     3245,     3210,     3261,     3210,    12722,    12936,    12887,    12838,      993
+    1050,     3183,     3230,     3152,     3219,     3211,     3244,    13018,    12898,    12908,    12896,      950
+    1038,     3171,     3190,     3175,     3228,     3153,     3129,    12636,    12738,    13072,    13136,     1005
+    1019,     1019,     1066,     1026,     1006,     1011,      996,     1018,      996,     1001,     1005,     1036
+
+Chromatic: 2
+Cycle: 1
+Time [s]: 0
+T[°C]: 37.0
+     376,      394,      390,      378,      384,      376,      390,      378,      393,      377,      377,      383
+     384,      418,      406,      421,      439,      423,      428,      877,      874,      880,      864,      395
+     379,      432,      422,      430,      442,      433,      434,      862,      858,      876,      851,      401
+     387,      420,      424,      433,      463,      442,      438,      894,      866,      862,      877,      396
+     398,      411,      422,      422,      430,      432,      444,      874,      886,      852,      872,      396
+     400,      418,      420,      430,      432,      430,      435,      872,      878,      856,      876,      379
+     396,      416,      424,      440,      436,      447,      435,      870,      908,      884,      915,      386
+     386,      380,      396,      398,      401,      400,      410,      402,      389,      393,      386,      409
+
+Chromatic: 3
+Cycle: 1
+Time [s]: 0
+T[°C]: 37.0
+      41,       38,       39,       41,       41,       38,       34,       33,       41,       38,       42,       35
+      36,       39,       37,       41,       41,       43,       43,       67,       64,       62,       62,       36
+      33,       40,       40,       44,       38,       43,       37,       61,       60,       59,       59,       34
+      40,       37,       39,       37,       38,       39,       39,       64,       58,       62,       65,       36
+      43,       44,       48,       43,       41,       47,       39,       58,       62,       62,       57,       37
+      37,       39,       43,       42,       44,       39,       39,       61,       58,       64,       59,       38
+      39,       40,       40,       36,       42,       41,       41,       63,       61,       56,       62,       40
+      41,       36,       40,       39,       40,       38,       38,       41,       41,       38,       36,       34
+

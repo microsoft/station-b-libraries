@@ -1,0 +1,3159 @@
+openapi: '3.0.3'
+info:
+  title: Biological Knowledge Graph (BCKG)
+  description: This is the initial implementation of the BCKG API.
+  version: '1.0'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    FileRef:
+      description: Description of the File Metadata stored in the Azure tables.
+      type: object
+      required:
+      - id
+      - fileName
+      - type
+      properties:
+        id:
+          type: string
+        fileName:
+          type: string
+        type: 
+          type: string
+          enum:
+          - AnthaBundleSource
+          - AnthaBundleFinal
+          - AnthaPlateLayout
+          - AnthaInputPlate
+          - CharacterizationData
+          - SequencingData
+          - CrnModel
+          - MiscFile
+    Concentration:
+      description: Concentration containing value and units.
+      type: object
+      properties: 
+        value:
+          type: number
+          format: double
+        unit: 
+          type: string
+          enum: 
+          - NM
+          - UM
+          - MM
+          - M
+          - X
+          - NGUL
+          - NGML
+          - UML
+          - ULML
+          - UGML
+          - PERC
+    Time: 
+      description: Schema describing time in hours, minutes, or seconds.
+      type: object
+      required:
+      - value
+      - units
+      properties: 
+        value:
+          type: number
+          format: double
+        units: 
+          type: string
+          enum:
+          - Hours
+          - Min
+          - Sec
+    Position: 
+      description: Schema describing the row and column integer index of a Well's position
+      type: object
+      required:
+      - row
+      - col
+      properties:
+        row:
+          type: integer
+          default: 0
+        col:
+          type: integer
+          default: 0
+    ## Part
+    Part:
+      description: A DNA Part
+      type: object
+      required:
+      - id
+      - name
+      - type
+      - sequence
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          description: Part Type
+          enum:
+          - Promoter       
+          - RBS            
+          - CDS            
+          - Terminator     
+          - UserDefined    
+          - Scar           
+          - Backbone       
+          - Ori            
+          - Linker         
+          - RestrictionSite
+        sequence:
+          description: DNA sequence
+          type: string
+        deprecated:
+          type: boolean
+          default: false
+    PartInstance:
+      description: An annotation of a Part in a sequence.
+      type: object
+      required:
+      - id
+      - position
+      - orientation
+      properties:
+        id:
+          type: string
+        position:
+          type: integer
+          description: Position of the part in the sequence
+        orientation:
+          type: boolean
+          description: true = 5'->3', false = reversed
+    ## Reagent
+    Reagent:
+      description: A biochemical reagent (DNA/RNA/Protein/Chemical/Generic Entity)
+      type: object
+      required:
+      - id
+      - name
+      - notes
+      properties:
+        id: 
+          type: string
+        name:
+          type: string
+        notes:
+          type: string
+        barcode:
+          type: string
+        deprecated:
+          type: boolean
+          default: false
+    DNAReagent:
+      description: A DNA Reagent
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Reagent'
+      required:
+      - type
+      - sequence
+      properties:
+        sequence:
+          type: string
+        type:
+          type: string
+          description: DNA Type
+          enum:
+          - SourceLinearDNA
+          - SourcePlasmidDNA
+          - AssembledPlasmidDNA
+          - GenericPlasmidDNA
+        concentration: 
+          $ref: '#/components/schemas/Concentration'
+    RNAReagent: 
+      description: An RNA Reagent
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Reagent'
+      required:
+      - type
+      - sequence
+      properties:
+        sequence: 
+          type: string
+        type: 
+          type: string
+          description: RNA Type
+          enum:
+          - MessengerRNA
+          - TransferRNA
+          - GuideRNA
+          - SmallRNA
+    ChemicalReagent: 
+      description: A Chemical Reagent
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Reagent'
+      required:
+      - type
+      properties:
+        type: 
+          type: string
+          description: Chemical Type
+          enum:
+          - Media
+          - Antibiotic
+          - SmallMolecule
+          - Other
+    ProteinReagent:
+      description: A Protein Reagent
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Reagent'
+      required:
+      - isReporter
+      properties:
+        isReporter: 
+          type: boolean
+    GenericEntityReagent:
+      description: A Generic Entity
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Reagent'
+    ## Cell 
+    Cell:
+      description: A biological cell strain
+      type: object
+      required: 
+      - id
+      - name
+      - notes
+      properties:
+        id: 
+          type: string
+        name: 
+          type: string
+        notes: 
+          type: string
+        barcode: 
+          type: string
+        genotype: 
+          type: string
+          default: ""
+        deprecated: 
+          type: boolean
+          default: false
+    CellEntity:
+      description: A biochemical entity in a Cellular compartment
+      type: object
+      required:
+      - cellId
+      - compartment
+      - entityId
+      - entityType
+      properties:
+        cellId:
+          type: string
+        compartment:
+          type: string
+          enum:
+          - Chromosome
+          - Plasmid
+          - Cytosol
+        entityId:
+          type: string
+        entityType:
+          type: string
+          enum:
+          - DNA
+          - RNA
+          - Chemical
+          - Protein
+          - GenericEntity
+    Prokaryote: 
+      description: A Prokaryotic cell strain
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Cell'
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: Prokaryotic type
+          enum:
+          - Bacteria
+    Interaction:
+      type: object
+      description: Core properties of an Interaction
+      required:
+      - id
+      properties:
+        id: 
+          type: string
+        notes: 
+          type: string
+        deprecated: 
+          type: boolean
+          default: false
+    CodesFor: 
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Interaction'
+      required: 
+      - cdsId
+      - proteinId
+      properties:
+        cdsId:
+          type: string
+          description: The ID of the template CDS
+        proteinId:
+          type: string
+          description: The ID of the protein produced
+    GeneticActivation:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Interaction'
+      required: 
+      - activator
+      - activated
+      properties:
+        activated:
+          type: string
+          description: The ID of the Promoter that is activated by the Transcription factors
+        activator:
+          type: array
+          items: 
+            type: string
+          description: The IDs of the transcription factor reagents
+    GeneticInhibition:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Interaction'
+      required: 
+      - inhibitor
+      - inhibited
+      properties:
+        inhibited:
+          type: string
+          description: The ID of the Promoter that is inhibited by the Transcription factors
+        inhibitor:
+          type: array
+          items: 
+            type: string
+          description: The IDs of the transcription factor reagents
+    GenericInteraction:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Interaction'
+      required: 
+      - regulator
+      - regulated
+      properties:
+        regulated:
+          type: string
+          description: The ID of the regulated reagents
+        regulator:
+          type: array
+          items: 
+            type: string
+          description: The IDs of the regulator reagents
+    Reaction: 
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Interaction'
+      required: 
+      - reactants
+      - enzyme
+      - products
+      properties:
+        reactants:
+          description: A list of complexes, where each complex is a list of reagent Ids.
+          type: array
+          items: 
+            type: array
+            items: 
+              type: string
+        products:
+          description: A list of complexes, where each complex is a list of reagent Ids.
+          type: array
+          items: 
+            type: array
+            items: 
+              type: string
+        enzyme:
+          type: array
+          items: 
+            type: string
+          description: A complex, where each complex is a list of reagent Ids.
+    ## Derived From
+    CellLineage: 
+      type: object
+      description: Lineage between mother and daughter cells
+      required:
+      - mother
+      - daughter
+      properties:
+        mother:
+          description: Cell ID of the mother cell strain
+          type: string
+        daughter:
+          description: Cell ID of the daughter cell strain
+          type: string
+    DNAComponent:
+      type: object
+      description: A description of the components that were used to build a DNA construct
+      required:
+      - source
+      - target
+      properties:
+        source:
+          type: string
+          description: DNA reagent ID of the component used during assembly
+        target:
+          type: string
+          description: DNA reagent ID of assembled construct
+    DNAAssembly: 
+      type: object
+      description: The experiment that produced the DNA circuit
+      required:
+        - experiment
+        - target
+      properties:
+        experiment: 
+          type: string
+          description: ID of the experiment that produced the DNA circuit
+        target:
+          type: string
+          description: ID of the DNA reagent that was produced in the experiment
+    CellTransformation: 
+      type: object
+      description: The experiment that transformed the cell strain
+      required:
+        - experiment
+        - target
+      properties:
+        experiment: 
+          type: string
+          description: ID of the experiment that transformed the cell strain
+        target:
+          type: string
+          description: ID of the Cell strain    
+    ## Sample
+    Condition:
+      type: object
+      description: A reagent treatment or input that is added at some specific concentration (and at some time) to a Sample.
+      required:
+      - sampleId
+      - reagentId
+      - reagentType
+      - concentration
+      properties:
+        sampleId: 
+          type: string
+        reagentType:
+          type: string
+          enum:
+          - DNA
+          - RNA
+          - Protein 
+          - Chemical
+          - GenericEntity
+        reagentId: 
+          type: string
+        concentration: 
+          $ref: '#/components/schemas/Concentration'
+        time:
+          $ref: '#/components/schemas/Time'      
+    PlateReaderMetaData:
+      type: object
+      description: Meta Data associated with platereaders. This schema specifically contains virtual and physical positional information of wells. 
+      required: 
+      - virtualWell
+      properties:
+        virtualWell:
+          $ref: '#/components/schemas/Position'
+        physicalWell:
+          $ref: '#/components/schemas/Position'
+        physicalPlateName:
+          type: string
+    SampleDevice:
+      type: object
+      required:
+        - cellId
+        - sampleId
+      properties:
+        sampleId:
+            type: string
+        cellId:
+          type: string
+        cellDensity:
+          type: number
+          format: double
+        preseedingDensity:
+          type: number
+          format: double
+    Sample: 
+      type: object
+      description: A sample is a modular unit of an experiment. Each sample contains input conditions, cell strain(s), and measurements/observations.
+      required:
+        - id
+        - experimentId
+      properties:
+        id:
+          type: string
+        experimentId: 
+          type: string
+        meta:
+          $ref: '#/components/schemas/PlateReaderMetaData'
+        deprecated: 
+          type: boolean
+          default: false
+    ## Signal
+    PlateReaderFilter:
+      description: Schema describing a plate reader filter
+      type: object
+      required:
+      - midpoint
+      properties:
+        midpoint:
+          type: number
+          format: double
+        width:
+          type: number
+          format: double
+    Signal:
+      description: Schema describing metadata associated with fluorescence observed from a plate reader
+      type: object
+      discriminator:
+        propertyName: signalType
+      required:
+      - id
+      - type
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          description: Signal Type
+          enum:
+          - PlateReaderFluorescence       
+          - PlateReaderAbsorbance            
+          - PlateReaderTemperature            
+          - PlateReaderLuminescence     
+          - Titre    
+          - GenericSignal
+        units:
+          type: string
+    PlateReaderFluorescence:
+      description: Schema describing metadata associated with fluorescence observed from a plate reader
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Signal'
+      required:
+      - emissionFilter
+      - excitationFilter
+      properties:
+        type:
+          type: string
+          description: Signal Type
+          enum:
+          - PlateReaderFluorescence
+        emissionFilter:
+          $ref: '#/components/schemas/PlateReaderFilter'
+        excitationFilter:
+          $ref: '#/components/schemas/PlateReaderFilter'
+        gain:
+          type: number
+          format: double
+    PlateReaderAbsorbance:
+      description: Schema describing metadata associated with absorbance observed from a plate reader
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Signal'
+      required:
+      - wavelength
+      - correction
+      properties:
+        type:
+          type: string
+          description: Signal Type
+          enum:
+          - PlateReaderAbsorbance
+        wavelength:
+          type: number
+          format: double
+        correction:
+          type: number
+          format: double
+        gain:
+          type: number
+          format: double
+    PlateReaderTemperature:
+      description: Schema describing metadata associated with temperature observed from a plate reader
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Signal'
+      properties:
+        type:
+          type: string
+          description: Signal Type
+          enum:
+          - PlateReaderTemperature
+    PlateReaderLuminescence:
+      description: Schema describing metadata associated with luminescence observed from a plate reader
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Signal'
+      properties:
+        type:
+          type: string
+          description: Signal Type
+          enum:
+          - PlateReaderLuminescence
+    Titre:
+      description: Final Titre measurements
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Signal'
+      properties:
+        type:
+          type: string
+          description: Signal Type
+          enum:
+          - Titre
+    GenericSignal:
+      description: Generic Signal
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Signal'
+      required: 
+      - name
+      properties:
+        type:
+          type: string
+          description: Signal Type
+          enum:
+          - GenericSignal
+        name: 
+          type: string
+    ## Observation
+    Observation:
+      type: object
+      required:
+        - id
+        - sampleId
+        - signalId
+        - value
+      properties:
+        id:
+          type: string
+        sampleId:
+          type: string
+        signalId:
+          type: string
+        replicate:
+          type: string
+        value: 
+          type: number
+          format: double
+        timestamp:
+          type: string 
+          format: date-time
+    ## Experiment
+    Experiment: 
+      type: object
+      description: An experiment
+      discriminator:
+        propertyName: type
+      required: 
+      - id
+      - name
+      - experimentType
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        notes:
+          type: string
+        type: 
+          type: string
+          description: Experiment Type
+          enum:
+          - BuildExperiment
+          - TestExperiment
+        deprecated:
+          type: boolean
+    BuildExperiment:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Experiment'
+      properties:
+        type:
+          type: string
+          description: Experiment Type
+          enum:
+          - BuildExperiment
+    TestExperiment:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Experiment'
+      properties:
+        type:
+          type: string
+          description: Experiment Type
+          enum:
+          - TestExperiment
+    ExperimentOperation:
+      type: object
+      description: Various operations, events, and stages of an experiment
+      required:
+      - id
+      - timestamp
+      - type
+      properties:
+        id: 
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        type:
+          type: string 
+          enum:
+          # Shared events
+          - AnthaExecuted
+          - AnthaBundleUploaded
+          - AnthaLayoutUploaded    
+          - ExperimentFinished
+          - ExperimentStarted    
+          # Events for test experiments
+          - BacterialStocksInnoculated
+          - OvernightStocksDiluted        
+          - PlateReaderStarted
+          - ResultsProcessed
+          # Events for build experiments
+          - InputPlatePrepared
+          - PlateIncubated
+          - ColoniesPicked
+          - Transfection
+          - Induction
+  responses:
+    PartResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Part'
+    MalformedRequest:
+          description: Malformed Request
+    Forbidden:
+      description: Forbidden (Insufficient privileges)
+  parameters:
+    GUID:
+      name: guid
+      in: path
+      description: The GUID of any entity
+      required: true
+      schema:
+        type: string
+    PartId:
+      name: partId
+      in: path
+      description: Part GUID
+      required: true
+      schema:
+        type: string
+    InteractionId:
+      name: interactionId
+      in: path
+      description: Interaction GUID
+      required: true
+      schema:
+        type: string
+    ReagentId:
+      name: reagentId
+      in: path
+      description: Reagent GUID
+      required: true
+      schema:
+        type: string
+    CellId:
+      name: cellId
+      in: path
+      description: Cell GUID
+      required: true
+      schema:
+        type: string
+    SampleId:
+      name: sampleId
+      in: path
+      description: Sample GUID
+      required: true
+      schema:
+        type: string
+    SignalId:
+      name: signalId
+      in: path
+      description: Signal GUID
+      required: true
+      schema:
+        type: string
+    ExperimentId:
+      name: experimentId
+      in: path
+      description: Experiment GUID
+      required: true
+      schema:
+        type: string
+    ObservationId:
+      name: observationId
+      in: path
+      description: Observation GUID
+      required: true
+      schema:
+        type: string
+    FileId:
+      name: fileId
+      in: path
+      description: File GUID
+      required: true
+      schema:
+        type: string
+      
+  
+paths:
+  ## Part
+  /parts/{guid}:
+    post:
+      description: Create a new Part. This method will throw a 500 error if a Part with the specific GUID already exists. 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Part'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    patch:
+      description: Modify an existing Part. This method will throw a 500 error if a Part with the specific GUID does not exist.
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Part'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # Promoter
+  /parts/promoter/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/PartResponse'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/promoter/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/promoter/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/promoter/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # RBS
+  /parts/rbs/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/PartResponse'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/rbs/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/rbs/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/rbs/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # CDS
+  /parts/cds/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/PartResponse'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/cds/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  
+  /parts/cds/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/cds/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # Terminator
+  /parts/terminator/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/PartResponse'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/terminator/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/terminator/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/terminator/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # UserDefined
+  /parts/userdefined/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/PartResponse'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/userdefined/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/userdefined/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/userdefined/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # Scar
+  /parts/scar/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/PartResponse'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/scar/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/scar/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/scar/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # Backbone
+  /parts/backbone/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/PartResponse'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/backbone/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID' 
+  /parts/backbone/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/backbone/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # Ori
+  /parts/ori/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/PartResponse'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/ori/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID' 
+  /parts/ori/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/ori/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # Linker
+  /parts/linker/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/PartResponse'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/linker/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID' 
+  /parts/linker/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/linker/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # RestrictionSite
+  /parts/restrictionsite/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/PartResponse'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/restrictionsite/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID' 
+  /parts/restrictionsite/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /parts/restrictionsite/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  ## Reagent
+  # DNA
+  /reagents/dna/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DNAReagent'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DNAReagent'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DNAReagent'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/dna/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/dna/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID' 
+  /reagents/dna/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/dna/{guid}/file-refs:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileRef'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # RNA
+  /reagents/rna/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RNAReagent'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RNAReagent'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RNAReagent'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/rna/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID' 
+  /reagents/rna/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/rna/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/rna/{guid}/file-refs:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileRef'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # Chemical
+  /reagents/chemical/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChemicalReagent'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChemicalReagent'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChemicalReagent'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/chemical/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID' 
+  /reagents/chemical/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/chemical/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/chemical/{guid}/file-refs:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileRef'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # Protein
+  /reagents/protein/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProteinReagent'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProteinReagent'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProteinReagent'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/protein/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID' 
+  /reagents/protein/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/protein/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/protein/{guid}/file-refs:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileRef'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  # GenericEntity
+  /reagents/genericentity/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericEntityReagent'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericEntityReagent'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericEntityReagent'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/genericentity/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID' 
+  /reagents/genericentity/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/genericentity/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /reagents/genericentity/{guid}/file-refs:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileRef'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  
+  ## Cell
+  /cells/{guid}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/Prokaryote'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/Prokaryote'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/Prokaryote'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /cells/{guid}/entities:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/CellEntity'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /cells/{guid}/add-entities:  
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CellEntity'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /cells/{guid}/remove-entities:  
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CellEntity'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /cells/{guid}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /cells/{guid}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /cells/{guid}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  ## Sample
+  /samples/{sampleId}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sample'
+                
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sample'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+  /samples/{sampleId}/devices:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/SampleDevice'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref:  '#/components/parameters/SampleId'
+  /samples/{sampleId}/device/{cellId}:
+    get:
+      security: 
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/SampleDevice'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+      - $ref: '#/components/parameters/CellId'
+  /samples/{sampleId}/add-devices:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                $ref: '#/components/schemas/SampleDevice'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+  /samples/{sampleId}/remove-devices:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                $ref: '#/components/schemas/SampleDevice'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref:  '#/components/parameters/SampleId'
+  /samples/{sampleId}/timeseries:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+  /samples/{sampleId}/conditions:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Condition'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+  /samples/{sampleId}/add-conditions:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                 $ref: '#/components/schemas/Condition'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+  /samples/{sampleId}/remove-conditions:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                 $ref: '#/components/schemas/Condition'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+  /samples/{sampleId}/observations:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Observation'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+  /samples/{sampleId}/add-observations:
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Observation'
+      responses:
+        '200':
+          description: OK                  
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+  /samples/{sampleId}/{signalId}/observations:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Observation'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+      - $ref: '#/components/parameters/SignalId'
+  /samples/{sampleId}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+  /samples/{sampleId}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+  /samples/{sampleId}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SampleId'
+
+  ## Experiments
+  /experiments/{experimentId}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/BuildExperiment'
+                - $ref: '#/components/schemas/TestExperiment'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/BuildExperiment'
+                - $ref: '#/components/schemas/TestExperiment'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/BuildExperiment'
+                - $ref: '#/components/schemas/TestExperiment'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/ExperimentId'
+  /experiments/{experimentId}/samples:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Sample'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Sample'
+      responses:
+        '200':
+          description: OK      
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/ExperimentId'
+  /experiments/{experimentId}/operations:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/ExperimentOperation'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/ExperimentId'
+  /experiments/{experimentId}/add-operation:
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExperimentOperation'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/ExperimentId'
+  /experiments/{experimentId}/remove-operation:
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExperimentOperation'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/ExperimentId'
+  /experiments/{experimentId}/signals:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  oneOf:
+                  - $ref: '#/components/schemas/PlateReaderFluorescence'
+                  - $ref: '#/components/schemas/PlateReaderAbsorbance'
+                  - $ref: '#/components/schemas/PlateReaderTemperature'
+                  - $ref: '#/components/schemas/PlateReaderLuminescence'
+                  - $ref: '#/components/schemas/Titre'
+                  - $ref: '#/components/schemas/GenericSignal'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+    - $ref: '#/components/parameters/ExperimentId'
+  /experiments/{experimentId}/add-signals:
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                oneOf:
+                - $ref: '#/components/schemas/PlateReaderFluorescence'
+                - $ref: '#/components/schemas/PlateReaderAbsorbance'
+                - $ref: '#/components/schemas/PlateReaderTemperature'
+                - $ref: '#/components/schemas/PlateReaderLuminescence'
+                - $ref: '#/components/schemas/Titre'
+                - $ref: '#/components/schemas/GenericSignal'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/ExperimentId'
+  /experiments/{experimentId}/remove-signals:
+    patch:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                oneOf:
+                - $ref: '#/components/schemas/PlateReaderFluorescence'
+                - $ref: '#/components/schemas/PlateReaderAbsorbance'
+                - $ref: '#/components/schemas/PlateReaderTemperature'
+                - $ref: '#/components/schemas/PlateReaderLuminescence'
+                - $ref: '#/components/schemas/Titre'
+                - $ref: '#/components/schemas/GenericSignal'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/ExperimentId'
+  /experiments/{experimentId}/observations:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Observation'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+    - $ref: '#/components/parameters/ExperimentId'
+  /experiments/{experimentId}/tags:
+    get: 
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/ExperimentId'
+  /experiments/{experimentId}/add-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/ExperimentId'
+  /experiments/{experimentId}/remove-tags:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/ExperimentId'
+  
+  ## Misc
+  /observations/{observationId}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Observation'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Observation'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/ObservationId'
+  /signals/{signalId}:
+    get:
+      description: Get Signal from GUID
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                  - $ref: '#/components/schemas/PlateReaderFluorescence'
+                  - $ref: '#/components/schemas/PlateReaderAbsorbance'
+                  - $ref: '#/components/schemas/PlateReaderTemperature'
+                  - $ref: '#/components/schemas/PlateReaderLuminescence'
+                  - $ref: '#/components/schemas/Titre'
+                  - $ref: '#/components/schemas/GenericSignal'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/SignalId'
+  /tags/{guid}:
+    get:
+      description: This function lists the tags associated with an entity. Currently, tags can be associated with Parts, Reagents, Cells, Samples, and Experiments.
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  ## FileRefs
+  /file-refs/{guid}/link:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/FileRef'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  /file-refs/{guid}/unlink:
+    patch: 
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/FileRef'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/GUID'
+  ## File Operations
+  /files/{fileId}:
+    get:
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            plain/text:
+              schema:
+                type: string
+                format: byte
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          plain/text:
+            schema:
+              type: string
+              format: byte
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    parameters:
+      - $ref: '#/components/parameters/FileId'

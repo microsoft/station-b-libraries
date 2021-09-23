@@ -10,7 +10,7 @@ First, clone the repository and ``cd`` into it.
 .. code-block:: bash
 
     git clone https://github.com/microsoft/station-b-libraries
-    cd station-b-libraries/python
+    cd station-b-libraries/PyStationB
 
 .. warning:: Cloning via SSH does not work properly with our submodules. Please, use HTTPS.
 
@@ -48,5 +48,5 @@ VS Code
 ~~~~~~~
 
 If you use VS Code, run this from a Windows command prompt: ``python scripts\get_pythonpath.py -j``
-and add the line of json that it prints to ``station-b-libraries\python\.vscode\settings.json``. 
+and add the line of json that it prints to ``station-b-libraries\PyStationB\.vscode\settings.json``. 
 
