@@ -1,0 +1,37 @@
+name: Windows FsStationB CLI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
+    - name: Setup VSTest
+      uses: darenm/Setup-VSTest@v1
+    - name: Restore tools
+      working-directory: ./FsStationB
+      run: dotnet tool restore
+    
+    - name: Build BCKG
+      shell: cmd
+      run: msbuild FsStationB/BCKG/BCKG.sln /p:Configuration=Release /p:Platform=x64 /restore
+    
+    - name: Build BCKG REST
+      shell: cmd
+      run: msbuild FsStationB/BCKG/REST/BCKG_REST_Server.sln /p:Configuration=Release /p:Platform=x64 /restore
+    
+    - name: Build FSTL
+      shell: cmd
+      run: msbuild FsStationB/FSTL/FSTL.sln /p:Configuration=Release /p:Platform=x64 /restore
+    
+    - name: Build Plate Reader Loader
+      shell: cmd
+      run: msbuild FsStationB/PlateReaderLoader/PlateReaderLoader.sln /p:Configuration=Release /p:Platform=x64 /restore
