@@ -1,0 +1,1 @@
+{"test_scenario": "branin", "scenario_dim": "None", "n_restarts": "2", "batch_method": "sequential-moment-matched-ei", "num_batches": "5", "batch_size": "5", "n_anchor_batches": "10", "n_candidate_anchor_batches": "200", "num_experiments": "10", "base_seed": "0", "use_gpy": "False", "override": "False", "results_dir": "outputs"}
