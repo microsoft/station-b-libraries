@@ -19,6 +19,9 @@ jobs:
     - name: Restore tools
       working-directory: ./FsStationB
       run: dotnet tool restore
+    - name: Restore BCKG REST tools
+      working-directory: ./FsStationB/BCKG/REST
+      run: dotnet tool restore
 
     - name: Build BCKG
       shell: cmd
@@ -31,3 +34,7 @@ jobs:
     - name: Build Plate Reader Loader
       shell: cmd
       run: msbuild FsStationB/PlateReaderLoader/PlateReaderLoader.sln /p:Configuration=Release /p:Platform="Any CPU" /restore
+
+    - name: Build BCKG REST API Server
+      shell: cmd
+      run: msbuild FsStationB/BCKG/REST/BCKG_REST_Server.sln /p:Configuration=Release /p:Platform="Any CPU" /restore
