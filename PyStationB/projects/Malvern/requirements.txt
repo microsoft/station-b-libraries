@@ -1,0 +1,9 @@
+azure-cosmosdb-table==1.0.6
+azure-storage-blob==12.8.1
+cffi==1.14.6
+dacite==1.6.0
+flask==2.0.1
+gpy==1.10.0
+matplotlib==3.4.2
+pydantic==1.8.2
+pyyaml==5.4.1

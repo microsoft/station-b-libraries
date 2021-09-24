@@ -1,0 +1,79 @@
+.pageContainer {
+    display: grid;
+    /*padding: 0px 150px*/
+    align-content: center;
+    margin: 0 50px;
+}
+
+.formField {
+    /*width: 100%;*/
+    padding: 5px;
+}
+
+.formContainer {
+    /*display: grid;*/
+    width: 100%;
+    align-content: center;
+    /*padding: 10px;*/
+    /*left: 0 auto;*/
+    /*right: 0 auto;*/
+    /*margin-left: 15em*/
+}
+
+.tab {
+    height: 46px;
+    width: 100%;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.dropdown {
+    margin: 5px -20px;
+}
+
+.submitButton {
+    margin: 10px 10px
+}
+
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+.fieldHeader {
+    font-weight: bold;
+    font-family: Arial;
+}
+
+.formError {
+    color: red;
+}
+
+.imgContainer {
+    display: grid;
+}
+
+.table ,th, td {
+    table-layout:fixed;
+    text-align: center;
+    border-collapse: collapse;
+    border-style: solid;
+    border-color: #888888;
+    border-width: 1px;
+    width: 100%;
+}
+
+.tableHeader {
+    font-family: Arial;
+    font-weight: bold;
+}
+
+.tableRow {
+    font-family: Arial;
+    font-weight: normal;
+}
+
+.tableContainer {
+    padding: 20px 5px;
+}
