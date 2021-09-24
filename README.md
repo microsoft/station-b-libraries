@@ -19,6 +19,7 @@ The workflows and libraries in repository can be broadly categorized into the fo
   - [Global Penalisation](PyStationB/libraries/GlobalPenalisation): a library that provides an implementation of the moment-matched approximation of qEI as well as benchmarks against other Bayesian Optimization acquisition functions.
   - [ABEX](PyStationB/libraries/ABEX): a wrapper around the publicly available [Emukit library](https://github.com/EmuKit/emukit)
   - [Cell Signalling](PyStationB/projects/CellSignalling): a project to demonstrate an end-to-end semi-automated pipeline that used Bayesian optimization, static characterization, and lab automation to optimize biological protocols for a desired objective.
+  - [Malvern App](PyStationB/projects/Malvern): a webapp/GUI interface for the [Cell Signalling](PyStationB/projects/CellSignalling) project.
 - **Time-series modelling and characterization**: This includes the following:
   - [StaticCharacterization](PystationB/libraries/StaticCharacterization): A Python library to enable the static characterization of gene expression. To *characterize* how circuit activity depends on different conditions, the static characterization library seeks to **summarize the whole time series into a single number**.
   - [FSTL](FsStationB/FSTL): An F# library to specify properties of time-series traces using Signal Temporal Logic.
