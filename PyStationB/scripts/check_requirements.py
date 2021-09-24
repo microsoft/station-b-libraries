@@ -11,6 +11,7 @@ from typing import List
 from pkg_resources import parse_requirements
 
 ROOT_DIR = Path(__file__).absolute().parent.parent
+EXCLUSIONS = ["GlobalPenalisation"]
 
 
 def read_requirements(path: Path):

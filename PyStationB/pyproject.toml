@@ -8,7 +8,7 @@ ignore-private = false
 ignore-property-decorators = false
 ignore-module = false
 fail-under = 81.7
-exclude = ["setup.py", "docs", "*tests", "libraries/Emukit", "libraries/PyBCKG", "libraries/*/*tests", "projects/*/*tests", "projects/Malvern/", "!/projects/Malvern/api"]
+exclude = ["setup.py", "docs", "*tests", "libraries/Emukit", "libraries/GlobalPenalisation", "libraries/PyBCKG", "libraries/*/*tests", "projects/*/*tests", "projects/Malvern/", "!/projects/Malvern/api"]
 ignore-regex = ["^get$", "^mock_.*", ".*BaseClass.*"]
 verbose = 1
 quiet = false
@@ -29,5 +29,5 @@ exclude = '''
 '''
 
 [tool.pyright]
-exclude = ["libraries/Emukit"]
+exclude = ["libraries/Emukit", "libraries/GlobalPenalisation"]
 useLibraryCodeForTypes = true

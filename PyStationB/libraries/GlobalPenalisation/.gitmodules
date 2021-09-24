@@ -1,0 +1,4 @@
+[submodule "libs/emukit"]
+	path = libs/emukit
+	url = https://github.com/BrunoKM/emukit/
+	branch = gradients-for-covariance-gpy

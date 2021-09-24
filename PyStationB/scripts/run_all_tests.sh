@@ -40,6 +40,9 @@ function run_tests_in_dir {
      if [ $(basename "$1") = "Emukit" -o ! -d $1/tests ]
      then return
      fi
+     if [ $(basename "$1") = "GlobalPenalisation" -o ! -d $1/tests ]
+     then return
+     fi
      # Set PYTHONPATH to have the right visibility for this subrepo.
      if [ "$1" = "." ]
      then export PYTHONPATH=$PWD
