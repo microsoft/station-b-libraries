@@ -1,3 +1,5 @@
+[![FsStationB Builds](https://github.com/microsoft/station-b-libraries/actions/workflows/build-fs-cli.yml/badge.svg)](https://github.com/microsoft/station-b-libraries/actions/workflows/build-fs-cli.yml)
+
 # Station B Libraries for Biological Computation
 
 ## Overview

@@ -10,10 +10,10 @@ pandas==1.2.4
 pyyaml==5.4.1
 scipy==1.6.3
 seaborn==0.11.1
-setuptools=52.0.0
+setuptools==52.0.0
 six==1.16.0
 torch==1.8.1
 tqdm==4.60.0
-wheel=0.36.2
+wheel==0.36.2
 git+git://github.com/BrunoKM/emukit@gradients-for-covariance-gpy#egg=emukit
   
