@@ -37,6 +37,7 @@ def get_subrepo_requirements(basename: str) -> List[str]:
             reqs[req.name].update(req.specs)  # type: ignore # auto
     for category in ["libraries", "projects"]:
         for subrepo in (ROOT_DIR / category).glob("*"):
+            if subrepo.name in EXCLUSIONS: continue
             req_file = subrepo / basename
             if req_file.exists():
                 try:
