@@ -1,4 +1,4 @@
-import { IDataset } from "../components/Interfaces"
+import { IAMLConfig, IDataset } from "../components/Interfaces"
 
 /// DATASETS ///
 
@@ -54,3 +54,34 @@ export interface IUploadDatasetFail {
 }
 
 export type UploadDatasetDispatchType = IUploadingDataset | IUploadDatasetSuccess | IUploadDatasetFail
+
+
+// PARSE AML SECRETS 
+export const PARSING_AML_SECRETS = "PARSING_AML_SECRETS"
+export const PARSE_AML_SECRETS_FAIL = "PARSE_AML_SECRETS_FAIL"
+export const PARSE_AML_SECRETS_SUCCESS = "PARSE_AML_SECRETS_SUCCESS"
+
+
+export interface IAMLConnectionResult {
+    aml_config?: IAMLConfig
+}
+
+export interface IParsingAMLSecrets {
+    type: typeof PARSING_AML_SECRETS
+}
+
+export interface IParseAMLSecretsFail {
+    type: typeof PARSE_AML_SECRETS_FAIL
+    payload: {
+        response: any
+    }
+}
+
+export interface IParseAMLSecretsSuccess {
+    type: typeof PARSE_AML_SECRETS_SUCCESS
+    payload: {
+        aml_config: IAMLConfig
+    }
+}
+
+export type ParseAMLSecretsDispatchType = IParsingAMLSecrets | IParseAMLSecretsSuccess | IParseAMLSecretsFail

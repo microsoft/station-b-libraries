@@ -1,9 +1,7 @@
-import axios from "axios";
 import React from "react"
 import { IAMLRun, IExperimentResult, IPyBCKGExperiment } from "../components/Interfaces";
 import { ISubmitResult } from "../components/utils/Form";
 import Tabs from "../components/utils/Tabs";
-import "../index.css"
 import { api_url } from "../components/utils/api";
 import { connector, PropsFromRedux } from "../store/connectors";
 import { IFormValues } from "../components/utils/FormShared";
@@ -124,40 +122,53 @@ class ExperimentSelectorPage extends React.Component<IExptSelectorProps, IState>
     async getOptions() {
 
         this.props.getExperimentOptions(api_url)
-        this.props.getAMLRunIdOptions(api_url)
+        // this.props.getAMLRunIdOptions(api_url)
 
-        console.log('props after calling getAMLRunIdOptions: ', this.props)
         const amlRunOptions = this.props.getAMLRunIdsResult
         const aml_runid_options = amlRunOptions?.aml_run_ids
         if (aml_runid_options) {
             this.setState({ aml_runid_options: aml_runid_options })
         }
 
-        const experimentOptions = this.props.getExperimentOptionsResult
-        const experiment_options = experimentOptions?.experiment_options
+        const experimentOptionsResult = this.props.getExperimentOptionsResult
+        const experimentOptions= experimentOptionsResult?.experiment_options
+        
+        if (experimentOptions) {
+            this.setState({experimentOptions: experimentOptions})
+            console.log(this.state)
+            
+            const selectedExperiment: IPyBCKGExperiment = experimentOptions[0]
+            console.log("Selected experiment: ", selectedExperiment)
 
-        if (experiment_options) {
             // To begin with, set a default selected experiment, so that iteration options update properly
-            const selectedExperiment: IPyBCKGExperiment = experiment_options[0]
-
-            this.props.getExperimentResult(api_url, selectedExperiment)
-            const getExperimentResult = this.props.getExperimentResultResult
-            const experiment_result = getExperimentResult?.experiment_result
-
-            const iterationOptions: string[] = experiment_result?.iterations || []
-            const selectedIteration: string = iterationOptions[0]
-            const foldOptions = experiment_result?.folds || []
-            const selectedFold: string = foldOptions[0]
-
             this.setState({
-                experimentOptions: experiment_options,
-                selectedExperiment: selectedExperiment,
-                iterationOptions: iterationOptions,
-                selectedIteration: selectedIteration,
-                foldOptions: foldOptions,
-                selectedFold: selectedFold
+                experimentOptions: experimentOptions,
+                selectedExperiment: selectedExperiment
             })
         }
+
+        if (this.state.selectedExperiment.Name){
+            this.props.getExperimentResult(api_url, this.state.selectedExperiment)
+            const getExperimentResultResult = this.props.getExperimentResultResult
+            const experimentResult = getExperimentResultResult?.experiment_result
+
+            if (experimentResult){
+
+                const iterationOptions: string[] = experimentResult?.iterations || []
+                const selectedIteration: string = iterationOptions[0]
+                const foldOptions = experimentResult?.folds || []
+                const selectedFold: string = foldOptions[0]
+
+                this.setState({
+
+                    iterationOptions: iterationOptions,
+                    selectedIteration: selectedIteration,
+                    foldOptions: foldOptions,
+                    selectedFold: selectedFold
+                })
+            }
+        }
+        
     }
 
     componentDidMount() {
@@ -256,7 +267,10 @@ class ExperimentSelectorPage extends React.Component<IExptSelectorProps, IState>
     }
 
     public render() {
-        const experimentOptions: IPyBCKGExperiment[] = this.props.getExperimentOptionsResult?.experiment_options || this.state.experimentOptions
+        // TODO: ExperimentOptions should be repalced with completed AML runs but they currently dont have associated iterations, epochs etc
+        const experimentOptionsResult = this.props.getExperimentOptionsResult
+        const experimentOptions: IPyBCKGExperiment[] =  experimentOptionsResult?.experiment_options || this.state.experimentOptions
+        
         const amlRunIdResult = this.props.getAMLRunIdsResult
         const amlRunIdOptions = amlRunIdResult?.aml_run_ids || this.state.aml_runid_options
 
@@ -272,13 +286,13 @@ class ExperimentSelectorPage extends React.Component<IExptSelectorProps, IState>
                     <h2> View experiment results</h2>
                     <form onSubmit={this.handleSubmit}>
                         <label>
-                            Select an AML run:
+                            Select an experiment:
                             <div className="formField">
                                 <select 
                                 >
-                                    {amlRunIdOptions.map((run, id) =>
-                                        <option key={'run' + id} value={run.RowKey}>
-                                            {run.RowKey}
+                                    {experimentOptions.map((exp, id) =>
+                                        <option key={'exp' + id} value={exp.Name}>
+                                            {exp.Name}
                                         </option>)
                                     }
                                 </select>

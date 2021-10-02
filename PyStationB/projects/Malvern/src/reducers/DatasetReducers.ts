@@ -1,17 +1,9 @@
 import { Reducer } from "redux"
-import { GetDatasetsDispatchType,  GETTING_DATASETS, GET_DATASETS_FAIL, GET_DATASETS_SUCCESS, IGetDataResult, UploadDatasetDispatchType, UPLOADING_DATASET, UPLOAD_DATASET_FAIL, UPLOAD_DATASET_SUCCESS } from "../actions/DatasetActionTypes"
-import { defaultUploadState, IUploadState } from "./reducerInterfaces"
+import { GetDatasetsDispatchType,  GETTING_DATASETS, GET_DATASETS_FAIL, GET_DATASETS_SUCCESS, ParseAMLSecretsDispatchType, PARSE_AML_SECRETS_FAIL, PARSE_AML_SECRETS_SUCCESS, PARSING_AML_SECRETS, UploadDatasetDispatchType, UPLOADING_DATASET, UPLOAD_DATASET_FAIL, UPLOAD_DATASET_SUCCESS } from "../actions/DatasetActionTypes"
+import { defaultDatasetsState, defaultParseAMLFileState, defaultUploadState, IGetDatasetsState, IParseAMLFileState, IUploadState } from "./reducerInterfaces"
 
 
 /// GET STORED DATASET OPTIONS ///
-export interface IGetDatasetsState {
-    getting: boolean,
-    getDatasetResult?: IGetDataResult
-}
-
-export const defaultDatasetsState: IGetDatasetsState = {
-    getting: false
-}
 
 export const getDatasetReducer: Reducer<IGetDatasetsState, GetDatasetsDispatchType> = (state = defaultDatasetsState, action) => {
     switch (action.type) {
@@ -57,6 +49,33 @@ export const uploadDatasetReducer: Reducer<IUploadState, UploadDatasetDispatchTy
                 filePath: action.payload
             }
         default:
+            return state
+    }
+}
+
+
+// PARSE AML Secrets
+export const parseAMLSecretsReducer: Reducer<IParseAMLFileState, ParseAMLSecretsDispatchType> = (state = defaultParseAMLFileState, action) => {
+    switch (action.type) {
+        case PARSING_AML_SECRETS: 
+            return {
+                ...state, 
+                parsing: true
+            }
+        case PARSE_AML_SECRETS_FAIL:
+            console.log('parse AML secrets file failed')
+            return {
+                ...state,
+                error: action.payload
+            }
+        case PARSE_AML_SECRETS_SUCCESS:
+            return {
+                ...state,
+                parsing: false,
+                error: null, 
+                amlConfigResult: action.payload
+            }
+        default: 
             return state
     }
 }

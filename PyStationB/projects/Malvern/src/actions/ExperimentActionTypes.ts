@@ -7,7 +7,7 @@ export const GET_EXPERIMENT_OPTIONS_FAIL = "GET_EXPERIMENTS_FAIL"
 export const GET_EXPERIMENT_OPTIONS_SUCCESS = "GET_EXPERIMENTS_SUCCESS"
 
 export interface IGetExperimentOptionsResult {
-    experiment_options?: IPyBCKGExperiment[]
+    experiment_options?: any[]
 }
 
 export interface GettingExperiments {
@@ -90,8 +90,7 @@ export const SUBMIT_EXPERIMENT_FAIL = "SUBMIT_EXPERIMENT_FAIL"
 export const SUBMIT_EXPERIMENT_SUCCESS = "SUBMIT_EXPERIMENT_SUCCESS"
 
 export interface ISubmitExperimentResult {
-    configPath: string,
-    observationsPath: string
+    amlRun?: IAMLRun
 }
 
 export interface ISubmittingExperiment {
@@ -100,6 +99,9 @@ export interface ISubmittingExperiment {
 
 export interface ISubmitExperimentSuccess {
     type: typeof SUBMIT_EXPERIMENT_SUCCESS,
+    payload: {
+        amlRun: IAMLRun
+    }
 }
 
 export interface ISubmitExperimentFail {

@@ -1,31 +1,29 @@
 ## Getting started
+
 1. Install [Node.js](https://nodejs.org/en/). This will automatically install Node Package Manager (npm) too.
+
 2. To install the dependencies for our app (specified in package.json):
-```cd app```
-```npm install```
 
-## Setting up the backend (Flask api)
-To create the virtual environment:
+`npm install`
 
-```pyStationB/app/api$ python -m venv MalvernEnv```
+## Setting up the conda envrionment
+Run the following command from the Malvern directory:
 
-## To install the packages:
-```pyStationB/app/api$ python -m pip install -r ../requirements_dev.txt```
-```pyStationB/app/api$ python -m pip install ../../libraries/ABEX```
-```pyStationB/app/api$ python -m pip install ../../libraries/Emukit```
+`conda env create -f environment.yml`
 
-## Install pyBCKG git submodule:
-```pyStationB/app$ cd ../ ```
-```pyStationB$ git submodule update --init --recursive``
+## To Activate the conda env:
 
-## To Activate the virtual env:
+`conda activate malvern`
 
-```pyStationB/app$ api\MalvernEnv\Scripts\activate Malvern``
 
 ## Running the app
 
 ### To start the React app
-`app$ npm run start`
+
+`npm run start`
 
 ### To start the Flask API
-`app$ npm run start-api`
+`npm run start-api`
+
+## Connecting to Azure 
+When you first start the app you will be prompted to login. To do this, enter a connection string in the login tab. Follow the [instructions here](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-keys-manage?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&tabs=azure-portal#view-account-access-keys) to get the connection string for your storage account

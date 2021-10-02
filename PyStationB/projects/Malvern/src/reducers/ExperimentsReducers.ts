@@ -5,19 +5,12 @@ import {
     GET_AML_RUNIDS_FAIL,
     GET_AML_RUNIDS_SUCCESS,
     GET_EXPERIMENT_OPTIONS_FAIL, GET_EXPERIMENT_OPTIONS_SUCCESS, GET_EXPERIMENT_RESULTS_FAIL, GET_EXPERIMENT_RESULTS_SUCCESS,
-    IGetAMLRunIdsResult, IGetExperimentOptionsResult, IGetExperimentResultResult, ISubmitExperimentResult, SubmitExperimentDispatchType, SUBMITTING_EXPERIMENT, SUBMIT_EXPERIMENT_FAIL, SUBMIT_EXPERIMENT_SUCCESS
+    SubmitExperimentDispatchType, SUBMITTING_EXPERIMENT, SUBMIT_EXPERIMENT_FAIL, SUBMIT_EXPERIMENT_SUCCESS
 } from "../actions/ExperimentActionTypes"
+import { defaultAMLRunIdsState, defaultExperimentOptionsState, defaultExperimentResultState, defaultSubmitExperimentState, IGetAMLRunIdsState, IGetExperimentOptionsState, IGetExperimentResultState, ISubmitExperimentState } from "./reducerInterfaces"
 
 
 /// GET EXPERIMENT OPTIONS ///
-export interface IGetExperimentOptionsState {
-    getting: boolean,
-    getExperimentOptionsResult?: IGetExperimentOptionsResult
-}
-
-export const defaultExperimentOptionsState: IGetExperimentOptionsState = {
-    getting: false
-}
 
 export const getExperimentOptionsReducer: Reducer<IGetExperimentOptionsState, GetExperimentOptionsDispatchType> = (state = defaultExperimentOptionsState, action) => {
     switch (action.type) {
@@ -39,15 +32,6 @@ export const getExperimentOptionsReducer: Reducer<IGetExperimentOptionsState, Ge
 }
 
 /// GET AML RUN IDS ///
-export interface IGetAMLRunIdsState {
-    getting: boolean,
-    getAMLRunIdsResult?: IGetAMLRunIdsResult
-}
-
-export const defaultAMLRunIdsState: IGetAMLRunIdsState =
-{
-    getting: false
-}
 
 export const getAMLRunIdsReducer: Reducer<IGetAMLRunIdsState, GetAMLRunIdsDispatchType> = (state = defaultAMLRunIdsState, action) => {
     switch (action.type) {
@@ -71,14 +55,6 @@ export const getAMLRunIdsReducer: Reducer<IGetAMLRunIdsState, GetAMLRunIdsDispat
 
 
 /// GET EXPERIMENT RESULTS ///
-export interface IGetExperimentResultState {
-    getting: boolean,
-    getExperimentResultResult?: IGetExperimentResultResult
-}
-
-export const defaultExperimentResultState: IGetExperimentResultState = {
-    getting: false
-}
 
 export const getExperimentResultReducer: Reducer<IGetExperimentResultState, GetExperimentResultDispatchType> = (state = defaultExperimentResultState, action) => {
     switch (action.type) {
@@ -100,14 +76,6 @@ export const getExperimentResultReducer: Reducer<IGetExperimentResultState, GetE
 }
 
 // SUBMIT NEW EXPERIMENT //
-export interface ISubmitExperimentState {
-    submitting: boolean,
-    submitExperimentResponse?: ISubmitExperimentResult
-}
-
-export const defaultSubmitExperimentState: ISubmitExperimentState = {
-    submitting: false
-}
 
 export const submitExperimentReducer: Reducer<ISubmitExperimentState, SubmitExperimentDispatchType> = (state = defaultSubmitExperimentState, action) => {
     switch (action.type) {
@@ -119,11 +87,13 @@ export const submitExperimentReducer: Reducer<ISubmitExperimentState, SubmitExpe
         case SUBMITTING_EXPERIMENT:
             return {
                 ...state,
-                getting: true
+                submitting: true
             }
         case SUBMIT_EXPERIMENT_SUCCESS:
             return {
                 ...state,
+                submitting: false,
+                submitExperimentResponse: action.payload
             }
         default:
             return state

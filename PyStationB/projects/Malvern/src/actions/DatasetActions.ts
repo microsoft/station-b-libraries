@@ -3,7 +3,7 @@ import {  Dispatch } from "redux";
 import {  IDataset } from "../components/Interfaces";
 import { IAppState } from "../reducers/RootReducer";
 import { getFileFromInput } from "./actionUtils";
-import { GET_DATASETS_FAIL, GET_DATASETS_SUCCESS, UPLOAD_DATASET_FAIL, UPLOAD_DATASET_SUCCESS } from "./DatasetActionTypes";
+import { GET_DATASETS_FAIL, GET_DATASETS_SUCCESS, PARSE_AML_SECRETS_FAIL, PARSE_AML_SECRETS_SUCCESS, UPLOAD_DATASET_FAIL, UPLOAD_DATASET_SUCCESS } from "./DatasetActionTypes";
 
 /// GET DATASETS /// 
 
@@ -40,19 +40,23 @@ export function GetDatasetOptionsActionCreator(apiUrl: string, connectionString:
 /// UPLOAD OBSERVATIONS ///
 
 function uploadObservations(apiUrl: string, connectionString: string, uploadedObservations: File, binary: string) {
+    const data = new FormData()
+    data.append('file', uploadedObservations)
     const response = axios.post(
         apiUrl + '/upload-observation-data',
+        data,
         {
             headers: {
                 storageConnectionString: connectionString,
                 fileName: uploadedObservations.name || "",
-                observations: binary
+                // observations: binary
             }
-        }
+        },
     )
     console.log('response from upload observations: ', response)
     return response
 }
+
 
 export function UploadObservationsActionCreator(apiUrl: string, formData: FormData) {
     return function (dispatch: Dispatch, getState: () => IAppState) {
@@ -61,8 +65,11 @@ export function UploadObservationsActionCreator(apiUrl: string, formData: FormDa
         const uploadedObservations = formData.get('uploadObservations') as File
         console.log('observations in action: ', uploadedObservations)
 
+        // load data from file as binary
         getFileFromInput(uploadedObservations)
             .then(binary => {
+                console.log('returning binary: ', binary)
+                console.log('uploaded observations: ', uploadedObservations)
                 return uploadObservations(apiUrl, connectionString, uploadedObservations, binary)
                     .then((response) =>
                         dispatch({
@@ -71,6 +78,63 @@ export function UploadObservationsActionCreator(apiUrl: string, formData: FormDa
                         }),
                         (error) => dispatch({
                             type: UPLOAD_DATASET_FAIL,
+                            error: error
+                        }),
+                    );
+            })
+
+
+    };
+}
+
+// TODO: move this
+// PARSE AML FILE
+
+
+function parseAMLFile(apiUrl: string, connectionString: string, uploadedAMLSecrets: File, binary: string) {
+    const data = new FormData()
+    data.append('file', uploadedAMLSecrets)
+    const response = axios.post(
+        apiUrl + '/parse-aml-secrets',
+        data,
+        {
+            headers: {
+                storageConnectionString: connectionString,
+                
+                // observations: binary
+            }
+        },
+    )
+    console.log('response from parse AML secrets: ', response)
+    return response
+
+}
+
+
+
+export function parseAMLFileActionCreator(apiUrl: string, formData: FormData){
+    return function (dispatch: Dispatch, getState: () => IAppState) {
+        const connectionString = getState().connectionState.connection?.connectionString || ""
+
+        const uploadedAMLFile = formData.get('uploadAMLSecrets') as File
+        console.log('Uploaded AML secrets in action: ', uploadedAMLFile)
+
+        // load data from file as binary
+        getFileFromInput(uploadedAMLFile)
+            .then(binary => {
+                console.log('returning binary: ', binary)
+                console.log('uploaded AML File: ', uploadedAMLFile)
+                return parseAMLFile(apiUrl, connectionString, uploadedAMLFile, binary)
+                    .then((aml_config) =>
+                        
+                        dispatch({
+                            type: PARSE_AML_SECRETS_SUCCESS,
+                            payload: {
+                                aml_config: aml_config
+                            }
+                        }),
+                        (error) => dispatch({
+                            type: PARSE_AML_SECRETS_FAIL,
                             error: error
                         }),
                     );

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react"
-import { IPyBCKGExperiment } from "../components/Interfaces";
-import {  IFormContext, IFormState, ISubmitResult } from "../components/utils/Form";
+import { IAbexConfig, IPyBCKGExperiment } from "../components/Interfaces";
+import { IFormContext, IFormState, ISubmitResult } from "../components/utils/Form";
 import UploadBox from "../components/utils/UploadBox";
 import ExperimentHeader from "../components/RunExperiment/ExperimentTypeHeader";
 import "../index.css"
@@ -9,16 +9,13 @@ import { api_url } from "../components/utils/api";
 import { connector, PropsFromRedux } from "../store/connectors";
 import { IValidationProp } from "../components/utils/Validation";
 import { IErrors, IFormValues } from "../components/utils/FormShared";
+import { Container, Form } from "react-bootstrap";
+import { isYaml } from "components/utils/validators";
 
 interface IProps extends PropsFromRedux{
     onSubmit: (values: IFormValues) => Promise<ISubmitResult>;
     validationRules: IValidationProp;
     submitted: boolean
-}
-
-interface IConfig {
-    id: string,
-    name: string
 }
 
 interface IObservationFile {
@@ -53,9 +50,9 @@ class NewIterationPage extends React.Component<IProps, IFormState> {
             values: {
                 selectedIteration: "",
                 iterationOptions: [""],
-                experimentOptions: [{}] as IPyBCKGExperiment[],
+                experimentOptions: [],
                 selectedExperiment: {} as IPyBCKGExperiment,
-                selectedConfig: {} as IConfig,
+                selectedConfig: {} as IAbexConfig,
                 uploadedCSV: {} as IObservationFile,
                 configOptions: []
             },
@@ -71,20 +68,26 @@ class NewIterationPage extends React.Component<IProps, IFormState> {
     }
 
     async getOptions() {
-        //const expRes = await axios.get<IPyBCKGExperiment[]>(api_url + '/get-experiment-options')
-        //const experiments = expRes.data
         this.props.getExperimentOptions(api_url)
+        const experimentOptionsResult = this.props.getExperimentOptionsResult
+        const experimentOptions = experimentOptionsResult?.experiment_options
 
-        const experimentOptions = this.props.getExperimentOptionsResult
-        const experiment_options = experimentOptions?.experiment_options || this.state.values.experimentOptions
+        if (experimentOptions){
+            this.setValue("experimentOptions", experimentOptions)
+            this.setValue("selectedExperiment", experimentOptions[0])
+        }
 
-        // TODO: replace with call in  middleware
-        const cfgRes = await axios.get<IConfig[]>(api_url + '/get-config-options')
-        const configs = cfgRes.data
+        this.props.getConfigOptions(api_url)
+        const cfgRes = this.props.getConfigOptionsResult
+        const config_options = cfgRes?.config_options
+        console.log("Config options: ", config_options)        
 
-        this.setValue("experimentOptions", experiment_options)
-        this.setValue("selectedExperiment", experiment_options[0])
-        this.setValue("configOptions", configs)
+
+        if (cfgRes){
+            console.log("Updating config options")
+            this.setValue("configOptions", config_options)
+
+        }
     }
 
     private changeExperimentFields = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -102,8 +105,8 @@ class NewIterationPage extends React.Component<IProps, IFormState> {
 
     private changeConfigFields = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedConfigName = e.target.value;
-        const configOptions: IConfig[] = this.state.values.configOptions
-        const selectedConfig = configOptions.find(cfg => cfg.name === selectedConfigName)
+        const configOptions: IAbexConfig[] = this.state.values.configOptions
+        const selectedConfig = configOptions.find(cfg => cfg.ConfigName === selectedConfigName)
         if (selectedConfig) {
             console.log('selected config: ')
             console.log(selectedConfig)
@@ -147,83 +150,69 @@ class NewIterationPage extends React.Component<IProps, IFormState> {
             };
             if (this.state.submitted) {
                 return (
-                    <div className="formContainer">
+                    <Container fluid={true}>
                         <p> Experiment submitted.</p>
                         <p> Your unique experiment id is ABC123.</p>
                         <p>Please make a note of this and check the Previous Experiments tab in a few hours.</p>
-                    </div>
+                    </Container>
                 )
             } else {
-                const experimentOptions: IPyBCKGExperiment[] = this.state.values.experimentOptions
-                const configOptions: IConfig[] = this.state.values.configOptions
+                console.log("state: ", this.state)
+                const experimentOptionsResult = this.props.getExperimentOptionsResult
+                const experimentOptions: IPyBCKGExperiment[] = experimentOptionsResult?.experiment_options || this.state.values.experimentOptions
+                
+                const configOptionsResult = this.props.getConfigOptionsResult
+                const configOptions: IAbexConfig[] = configOptionsResult?.config_options || this.state.values.configOptions
                 return (
-                    <div className="pageContainer">
+                    <Container fluid={true}>
                         <ExperimentHeader />
                         <h1>Start a new iteration for an existing track</h1>
                         <form onSubmit={this.handleSubmit} >
-                            <div className="formField">
-                                <label>
-                                    <h3>Select an Experiment:</h3>
-                                    <div className="formContainer">
-                                        <select
-                                            value={this.state.values.selectedExperiment.name}
-                                            onChange={(e) => this.changeExperimentFields(e)}
-                                        >
-                                            {experimentOptions.map((exp, id) =>
-                                                <option key={'exp'+id} value={exp.Name}>
-                                                    {exp.Name}
-                                                </option>)
-                                            }
-                                        </select>
-                                    </div>
-                                </label>
-                            </div>
-                            <div className="formContainer">
-                                <div className="formField">
-                                    <h2> Select or upload config </h2>
-                                    <label>
-                                        <h3>Select an existing config:</h3>
-                                        <div className="formContainer">
-                                            <select value={this.state.values.selectedConfig.name} onChange={
-                                                (e) => this.changeConfigFields(e)
-                                            }>
-                                                {configOptions.map(cfg =>
-                                                    <option key={cfg.id} value={cfg.name}>
-                                                        {cfg.name}
-                                                    </option>)
-                                                }
-                                            </select>
-                                        </div>
-                                    </label>
-                                </div>
-                                <div className="formField">
-                                    <h3> Upload new config (.yml)</h3>
-                                    <UploadBox
-                                        upload={this.uploadConfigFile}
-                                        defaultValues={{}}
-                                        expectedFileType=".yml"
-                                        validationRules={{}}
-                                    />
-                                </div>
-                                <div className="formField">
-                                    <h3> Upload observation file (.csv)</h3>
-                                    <UploadBox
-                                        upload={this.uploadObservationFile}
-                                        defaultValues={{}}
-                                        expectedFileType=".csv"
-                                        validationRules={{}}
-                                    />
-                                </div>
-                            </div>
-                            <div className="formField">
-                                <input
-                                    type="submit"
-                                    disabled={this.errorsEncountered(this.state.errors)}
-                                >
-                                </input>
-                            </div>
+                            <Form.Label>Select an Experiment:</Form.Label>
+                            <select
+                                value={this.state.values.selectedExperiment.name}
+                                onChange={(e) => this.changeExperimentFields(e)}
+                            >
+                                {experimentOptions.map((exp, id) =>
+                                    <option key={'exp'+id} value={exp.Name}>
+                                        {exp.Name}
+                                    </option>)
+                                }
+                            </select>
+                            <br />
+                            <Form.Label>Select an existing config:</Form.Label>
+                            <select value={this.state.values.selectedConfig.name} onChange={
+                                (e) => this.changeConfigFields(e)
+                            }>
+                                {configOptions.map(cfg =>
+                                    <option key={'conf'+cfg.ConfigName} value={cfg.ConfigName}>
+                                        {cfg.ConfigName}
+                                    </option>)
+                                }
+                            </select>
+                            <br />
+                            <Form.Label>OR Upload new config (.yml)</Form.Label>
+                            <UploadBox
+                            upload={this.uploadConfigFile}
+                            defaultValues={{}}
+                            expectedFileType='.yml'
+                            validationRules={{ selectedFile: { validator: isYaml } }}
+                        />
+                            <Form.Label> Upload observation file (.csv)</Form.Label>
+                            <UploadBox
+                                upload={this.uploadObservationFile}
+                                defaultValues={{}}
+                                expectedFileType=".csv"
+                                validationRules={{}}
+                            />
+                            <br />
+                            <input
+                                type="submit"
+                                disabled={this.errorsEncountered(this.state.errors)}
+                            >
+                            </input>
                         </form>
-                    </div>
+                    </Container>
                 )
 
             }
@@ -286,16 +275,12 @@ class NewIterationPage extends React.Component<IProps, IFormState> {
             );
         }
 
-        const response = axios.post(api_url + "/upload-config-data", formData
-        ).then(res => {
-            // Set value of 'config' in state
-            const newConfig = {'name': fileSelected.name}
-            this.setValue('selectedConfig', newConfig)
-            return { success: true };
-        });
+        this.props.uploadConfig(api_url, formData)
 
-
-        return { success: false };
+        if (this.props.error) {
+            return {success: false}
+        }
+        return { success: true };
 
     };
 
@@ -305,26 +290,24 @@ class NewIterationPage extends React.Component<IProps, IFormState> {
 
         if (fileSelected && fileSelected.name) {
             formData.append(
-                "uploadedCSV",
+                "uploadObservations",
                 fileSelected,
                 fileSelected.name
             );
         }
 
-        const response = axios.post(api_url + "/upload-observation-data", formData
-        ).then(res => {
-            const newCSV = { 'name': fileSelected.name }
-            this.setValue('uploadedCSV', newCSV)
-            return { success: true };
-        });
+        this.props.uploadObservations(api_url, formData)
 
-
-        return { success: false };
+        if (this.props.error) {
+            return { success: false }
+        }
+        return { success: true };
 
     };
 
  
     public handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        // TODO: create SubmitNewIterationAction and replace this method
         event.preventDefault();
 
         const response = axios.post<{ string: string }>(

@@ -6,3 +6,7 @@ dependencies:
   - pip==20.1.1
   - pip:
     - -r requirements_dev.txt
+    - ../../libraries/ABEX
+    - ../../libraries/Emukit
+    - ../../libraries/PyBCKG
+    - ../../libraries/Utilities

@@ -1,0 +1,13 @@
+[run]
+parallel = true
+omit = 
+    */setup.py, 
+    */tests/*,
+    /simulator/*
+source =
+    api
+
+[report]
+show_missing = true
+precision = 2
+fail_under = 100.00

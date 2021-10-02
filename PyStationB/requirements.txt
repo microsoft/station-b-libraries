@@ -31,10 +31,10 @@ rdflib==5.0.0
 requests==2.25.1
 scipy==1.6.3
 seaborn==0.11.1
-setuptools=52.0.0
+setuptools==52.0.0
 six==1.16.0
 sobol-seq==0.2.0
 sqlalchemy==1.4.15
 torch==1.8.1
 tqdm==4.60.0
-wheel=0.36.2
+wheel==0.36.2
