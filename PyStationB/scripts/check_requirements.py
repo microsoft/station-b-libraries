@@ -36,6 +36,7 @@ def get_subrepo_requirements(basename: str) -> List[str]:
             reqs[req.name].update(req.specs)  # type: ignore # auto
     for category in ["libraries", "projects"]:
         for subrepo in (ROOT_DIR / category).glob("*"):
+            if subrepo.name in EXCLUSIONS: continue
             req_file = subrepo / basename
             if req_file.exists():
                 try:
@@ -151,9 +152,9 @@ def check_requirements(args: List[str]) -> bool:
             write_top_level_requirement_file(basename, subrepo_reqs, target)  # pragma: no cover
         elif not check_top_level_requirement_file(basename, subrepo_reqs, target):
             is_consistent = False  # pragma: no cover
-    if is_consistent and not force:
+    if is_consistent and not force: # pragma: no cover
         sys.stderr.write("# Environment and requirements files all look OK.\n")
-    return is_consistent
+    return is_consistent # pragma: no cover
 
 
 def check_top_level_requirement_file(basename: str, subrepo_reqs: List[str], target: Path) -> bool:
