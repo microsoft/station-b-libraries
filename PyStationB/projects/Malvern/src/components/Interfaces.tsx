@@ -72,3 +72,16 @@ export interface IAbexConfig {
     ConfigName: string,
     Timestamp: string
 }
+
+export interface IAMLConfig {
+    SubscriptionId: string,
+    ResourceGroup: string,
+    WorkspaceName: string,
+    ComputeTarget: string
+}
+
+export interface IAMLRun {
+    ExperimentName: string,
+    RunId: string,
+    RunUrl: string
+}

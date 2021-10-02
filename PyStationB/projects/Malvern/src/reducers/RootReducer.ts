@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
-import { getConfigOptionsReducer, IGetConfigOptionsState, uploadConfigReducer } from "./ConfigReducers";
+import { getConfigOptionsReducer, uploadConfigReducer } from "./ConfigReducers";
 import { connectionReducer, IConnectionState } from "./ConnectionReducer";
 import { errorReducer, IErrorState } from "./ErrorReducer";
-import { getDatasetReducer, IGetDatasetsState, uploadDatasetReducer } from "./DatasetReducers";
-import { getAMLRunIdsReducer, getExperimentOptionsReducer, getExperimentResultReducer, IGetAMLRunIdsState, IGetExperimentOptionsState, IGetExperimentResultState, ISubmitExperimentState, submitExperimentReducer } from "./ExperimentsReducers";
-import { IUploadState } from "./reducerInterfaces";
+import { getDatasetReducer, parseAMLSecretsReducer, uploadDatasetReducer } from "./DatasetReducers";
+import { getAMLRunIdsReducer, getExperimentOptionsReducer, getExperimentResultReducer, submitExperimentReducer } from "./ExperimentsReducers";
+import { IUploadState, IParseAMLFileState, IGetDatasetsState, IGetConfigOptionsState, IGetExperimentOptionsState, IGetAMLRunIdsState, IGetExperimentResultState, ISubmitExperimentState } from "./reducerInterfaces";
 
 export interface IAppState {
     readonly connectionState: IConnectionState
@@ -17,6 +17,7 @@ export interface IAppState {
     readonly uploadObservationsState: IUploadState
     readonly errorState: IErrorState
     readonly submitExperimentState: ISubmitExperimentState
+    readonly amlConfigState: IParseAMLFileState
 }
 
 // combine all reducers into single object. Outputs state object with given keys
@@ -30,5 +31,6 @@ export const rootReducer = combineReducers<IAppState>({
     uploadConfigState: uploadConfigReducer,
     uploadObservationsState: uploadDatasetReducer,
     errorState: errorReducer,
-    submitExperimentState: submitExperimentReducer
+    submitExperimentState: submitExperimentReducer,
+    amlConfigState: parseAMLSecretsReducer,
 })

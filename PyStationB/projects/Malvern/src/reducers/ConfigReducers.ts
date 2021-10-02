@@ -1,16 +1,8 @@
 import { Reducer } from "redux"
-import { GetConfigsDispatchType, GETTING_CONFIGS, GET_CONFIGS_FAIL, GET_CONFIGS_SUCCESS, IGetConfigsResult, UploadConfigDispatchType, UPLOAD_CONFIG_FAIL, UPLOADING_CONFIG, UPLOAD_CONFIG_SUCCESS } from "../actions/ConfigActionTypes"
-import { defaultUploadState, IUploadState } from "./reducerInterfaces"
+import { GetConfigsDispatchType, GETTING_CONFIGS, GET_CONFIGS_FAIL, GET_CONFIGS_SUCCESS, UploadConfigDispatchType, UPLOAD_CONFIG_FAIL, UPLOADING_CONFIG, UPLOAD_CONFIG_SUCCESS } from "../actions/ConfigActionTypes"
+import { defaultGetConfigState, defaultUploadState, IGetConfigOptionsState, IUploadState } from "./reducerInterfaces"
 
 /// GET CONFIG OPTIONS 
-export interface IGetConfigOptionsState {
-    getting: boolean,
-    getConfigsResult?: IGetConfigsResult
-}
-
-export const defaultGetConfigState: IGetConfigOptionsState = {
-    getting: false
-}
 
 export const getConfigOptionsReducer: Reducer<IGetConfigOptionsState, GetConfigsDispatchType> = (state = defaultGetConfigState, action) => {
     switch (action.type) {

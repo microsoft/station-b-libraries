@@ -3,7 +3,7 @@ import { AnyAction, bindActionCreators, Dispatch } from "redux"
 import { ThunkDispatch } from "redux-thunk"
 import { GetConfigOptionsActionCreator, UploadConfigActionCreator } from "../actions/ConfigActions"
 import { ConnectToAzureStorage, DisconnectFromAzureStorage } from "../actions/ConnectionActions"
-import { GetDatasetOptionsActionCreator, UploadObservationsActionCreator } from "../actions/DatasetActions"
+import { GetDatasetOptionsActionCreator, UploadObservationsActionCreator, parseAMLFileActionCreator } from "../actions/DatasetActions"
 import { GetAMLRunIdsActionCreator, GetExperimentOptionsActionCreator, GetExperimentResultActionCreator, SubmitExperimentActionCreator } from "../actions/ExperimentActions"
 
 import { IAppState } from "../reducers/RootReducer"
@@ -23,7 +23,8 @@ export const mapStateToProps = (state: IAppState) => {
         loggedIn: state.connectionState.connection?.connected,
         error: state.errorState.error,
         uploadConfigResult: state.uploadConfigState.filePath,
-        uploadObservationsResult: state.uploadObservationsState.filePath
+        uploadObservationsResult: state.uploadObservationsState.filePath,
+        amlConfigResult: state.amlConfigState,
     }
 }
 
@@ -40,7 +41,9 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>)
             getConfigOptions: GetConfigOptionsActionCreator,
             uploadConfig: UploadConfigActionCreator,
             uploadObservations: UploadObservationsActionCreator,
-            submitNewExperiment: SubmitExperimentActionCreator
+            parseAMLFile: parseAMLFileActionCreator,
+            submitNewExperiment: SubmitExperimentActionCreator,
+            // submitNewIteration: SubmitIterationActionCreator  (TODO)
         },
         dispatch
     )

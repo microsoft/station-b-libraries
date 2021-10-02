@@ -1,11 +1,8 @@
 import axios from "axios";
 import { Dispatch } from "redux";
-import { IExperimentResult, IPyBCKGExperiment, IAMLRun } from "../components/Interfaces";
-import {
-    GET_AML_RUNIDS_FAIL,
-    GET_AML_RUNIDS_SUCCESS,
-    GET_EXPERIMENT_OPTIONS_FAIL, GET_EXPERIMENT_OPTIONS_SUCCESS, GET_EXPERIMENT_RESULTS_FAIL, GET_EXPERIMENT_RESULTS_SUCCESS, SUBMIT_EXPERIMENT_FAIL, SUBMIT_EXPERIMENT_SUCCESS
-} from "./ExperimentActionTypes";
+import { IExperimentResult, IPyBCKGExperiment, IAMLRun, IAMLConfig } from "../components/Interfaces";
+import {GET_AML_RUNIDS_FAIL,GET_AML_RUNIDS_SUCCESS, GET_EXPERIMENT_OPTIONS_FAIL, GET_EXPERIMENT_OPTIONS_SUCCESS, GET_EXPERIMENT_RESULTS_FAIL,
+     GET_EXPERIMENT_RESULTS_SUCCESS, SUBMIT_EXPERIMENT_FAIL, SUBMIT_EXPERIMENT_SUCCESS} from "./ExperimentActionTypes";
 import { IAppState } from "../reducers/RootReducer";
 
 
@@ -22,8 +19,6 @@ export function GetExperimentOptionsActionCreator(api_url: string) {
     // When this function is passed to `dispatch`, the thunk middleware will intercept it,
     // and call it with `dispatch` and `getState` as arguments.
     return function (dispatch: Dispatch, getState: () => IAppState) {
-        //const tableService = getState().connectionState.connection?.tableService
-        //console.log('table service within experiment action creator: ', tableService)
         const connectionString = getState().connectionState.connection?.connectionString || ""
 
         return getExperimentOptions(api_url, connectionString).then(
@@ -104,34 +99,41 @@ export function GetExperimentResultActionCreator(api_url: string, selectedExperi
 }
 
 // SUBMIT NEW EXPERIMENT //
-export function submitNewExperiment(api_url: string, connectionString: string, configPath:string, observationsPath:string) {
-    return axios.post<IExperimentResult>(
-        api_url + '/submit-new-experiment',
-        {
-            headers: {
-                storageConnectionString: connectionString,
-                configPath: configPath,
-                observationsPath: observationsPath
+export function submitNewExperiment(api_url: string, connectionString: string, configPath:string,
+    observationsPath:string, amlConfig: IAMLConfig) {
+    
+        const response = axios.post<IExperimentResult>(
+            api_url + '/submit-new-experiment',
+            {
+                headers: {
+                    storageConnectionString: connectionString,
+                    configPath: configPath,
+                    observationsPath: observationsPath,
+                    amlConfig: amlConfig
+                }
             }
-        }
-    )
+        );
+        console.log("Response from submit new experiment: ", response);
+        return response;
 }
 
 
 export function SubmitExperimentActionCreator(api_url: string, formData: FormData) {
     return function (dispatch: Dispatch, getState: () => IAppState) {
-        const connectionString = getState().connectionState.connection?.connectionString || ""
+        const connectionString = getState().connectionState.connection?.connectionString || "";
 
         const configPath = formData.get("configPath") as string
         const observationsPath = formData.get("observationsPath") as string
+        const emptyAMLConfig: IAMLConfig = {SubscriptionId: "", ResourceGroup: "",  WorkspaceName: "", ComputeTarget: ""}
+        const amlConfig = getState().amlConfigState.amlConfigResult?.aml_config || emptyAMLConfig
 
-        return submitNewExperiment(api_url, connectionString, configPath, observationsPath).then(
+        return submitNewExperiment(api_url, connectionString, configPath, observationsPath, amlConfig).then(
             (res) => (res.data))
-            .then((response) =>
+            .then((newExperimentResponse) =>
                 dispatch({
                     type: SUBMIT_EXPERIMENT_SUCCESS,
                     payload: {
-                        experiment_result: response
+                        amlRun: newExperimentResponse
                     }
                 }),
                 (error) => dispatch({

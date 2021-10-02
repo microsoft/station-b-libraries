@@ -8,7 +8,7 @@ import { GET_CONFIGS_FAIL, GET_CONFIGS_SUCCESS, UPLOAD_CONFIG_FAIL, UPLOAD_CONFI
 /// GET CONFIG OPTIONS ///
 function getConfigOptions(apiUrl: string, connectionString: string) {
     return axios.get<IAbexConfig[]>(
-        apiUrl + '/get-dataset-options',
+        apiUrl + '/get-config-options',
         { headers: { storageConnectionString: connectionString } }
     )
 }
@@ -38,20 +38,23 @@ export function GetConfigOptionsActionCreator(apiUrl: string) {
 
 /// UPLOAD CONFIG ///
 function uploadConfig(apiUrl: string, connectionString: string, uploadedConfig: File, binary: string) {
-
+    const data = new FormData()
+    data.append('file', uploadedConfig)
 
     const response = axios.post(
         apiUrl + '/upload-config-data',
+        data,
         {
             headers: {
                 storageConnectionString: connectionString,
                 fileName: uploadedConfig.name || "",
-                config: binary
+                // config: binary
             }
         }
     )
     console.log('response from upoad config: ', response)
     return response
+
 }
 
 export function UploadConfigActionCreator(apiUrl: string, formData: FormData) {
@@ -63,6 +66,8 @@ export function UploadConfigActionCreator(apiUrl: string, formData: FormData) {
 
         getFileFromInput(uploadedConfig)
             .then(binary => {
+                console.log('returning binary', binary)
+                console.log('returning config', uploadedConfig )
                 return uploadConfig(apiUrl, connectionString, uploadedConfig, binary)
                     .then((response) =>
                         dispatch({

@@ -11,7 +11,6 @@ from typing import List
 from pkg_resources import parse_requirements
 
 ROOT_DIR = Path(__file__).absolute().parent.parent
-EXCLUSIONS = ["GlobalPenalisation"]
 
 
 def read_requirements(path: Path):
@@ -55,7 +54,7 @@ def get_subrepo_requirements(basename: str) -> List[str]:
         req_str = name
         if len(specs) > 1:
             raise ValueError(f"Possible clash between specs for {name}: {specs}")  # pragma: no cover
-        elif len(specs) == 1:
+        elif len(specs) == 1:  # pragma: no cover
             rel, value = list(specs)[0]
             req_str += rel + value
         req_list.append(req_str)
@@ -70,6 +69,20 @@ def get_non_empty_lines_stripping_comments(path: Path):
     with path.open() as fh:
         env_lines = [line.split("#", 1)[0].rstrip() for line in fh]
         return [line for line in env_lines if line]
+
+
+def ignore_local_libraries(env_lines: List[str]) -> List[str]:
+    """
+    Ignore lines denoting local 'libraries' modules (installed via 'pip install -e') since these could be different
+    for every project
+
+    Args:
+        env_lines: A list of required packages as specified in requirements file
+
+    Returns: The list, minus any lines containing '-e' i.e. local modules
+
+    """
+    return [line for line in env_lines if not ('-e' in line and '/libraries/' in line)]
 
 
 def process_environment_files(force: bool) -> bool:
@@ -97,6 +110,7 @@ def process_environment_files(force: bool) -> bool:
                             gh.write(f"{line}\n")
             elif sub_env_file.exists():
                 sub_env_lines = get_non_empty_lines_stripping_comments(sub_env_file)
+                sub_env_lines = ignore_local_libraries(sub_env_lines)
                 if sub_env_lines != expected:  # pragma: no cover
                     sys.stderr.write(f"# Unexpected content in {sub_env_file}:\n")
                     sys.stderr.write("# Expected:\n")

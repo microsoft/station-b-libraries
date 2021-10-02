@@ -7,11 +7,7 @@ import "../index.css"
 import { api_url } from "../components/utils/api";
 import { connector, PropsFromRedux } from "../store/connectors";
 import { IErrors, IFormValues } from "../components/utils/FormShared";
-
-//interface ICloneState {
-//    experimentOptions: IPyBCKGExperiment[]
-//    selectedExperiment: IPyBCKGExperiment
-//}
+import { Container, Form } from "react-bootstrap";
 
 interface IProps extends PropsFromRedux{
     onSubmit: (values: IFormValues) => Promise<ISubmitResult>;
@@ -23,7 +19,7 @@ class CloneExperimentPage extends React.Component<IProps, IFormState> {
         super(props)
         this.state = {
             values: {
-                experimentOptions: [{}] as IPyBCKGExperiment[],
+                experimentOptions: [] ,
                 selectedExperiment: {} as IPyBCKGExperiment,
             },
             errors: {},
@@ -45,13 +41,14 @@ class CloneExperimentPage extends React.Component<IProps, IFormState> {
     async getOptions() {
         this.props.getExperimentOptions(api_url)
 
-        const experimentOptions = this.props.getExperimentOptionsResult
-        const experiment_options = experimentOptions?.experiment_options || this.state.values.experimentOptions
+        const experimentOptionsResult = this.props.getExperimentOptionsResult
+        const experimentOptions = experimentOptionsResult?.experiment_options
 
         // TODO: update value of experiment_options in state?
-
-        this.setValue("experimentOptions", experiment_options)
-        this.setValue("selectedExperiment", experiment_options[0])
+        if (experimentOptions){
+            this.setValue("experimentOptions", experimentOptions)
+            this.setValue("selectedExperiment", experimentOptions[0])
+        }
     }
 
 
@@ -85,57 +82,53 @@ class CloneExperimentPage extends React.Component<IProps, IFormState> {
     public render() {
         if (!this.props.connection?.connected) {
             return (
-                <div>
+                <Container fluid={true}>
                     <h3>You are not connected. Please go to log in to create an experiment</h3>
-                </div>
+                </Container>
             )
         } else {
-            const experimentOptions: IPyBCKGExperiment[] = this.state.values.experimentOptions
             if (this.state.submitted) {
                 return (
-                    <div className="formContainer">
+                    <Container fluid={true}>
                         <p> Experiment submitted.</p>
                         <p> Your unique experiment id is ABC123.</p>
                         <p>Please make a note of this and check the Previous Experiments tab in a few hours.</p>
-                    </div>
+                    </Container>
                 )
             } else {
+                const experimentOptionsResult = this.props.getExperimentOptionsResult
+                const experimentOptions: IPyBCKGExperiment[] = experimentOptionsResult?.experiment_options || this.state.values.experiment_options || []
+                
+
                 return (
-                    <div className="pageContainer">
+                    <Container fluid={true}>
                         <ExperimentHeader />
                         <h1>Repeat a previous experiment</h1>
                         <form onSubmit={this.handleSubmit} >
-                            <div className="formField">
-                                <label>
-                                    <h3>Select an Experiment:</h3>
-                                    <div className="formContainer">
-                                        <select value={this.state.values.selectedExperiment.name} onChange={
-                                            (e) => this.changeExperimentFields(e)
-                                        }>
-                                            {experimentOptions.map((exp, id) =>
-                                                <option key={'exp'+id} value={exp.Name}>
-                                                    {exp.Name}
-                                                </option>)
-                                            }
-                                        </select>
-                                    </div>
-                                </label>
-                            </div>
-                            <div className="formField">
-                                <input
-                                    type="submit"
-                                    disabled={this.errorsEncountered(this.state.errors)}
-                                >
-                                </input>
-                            </div>
+                            <Form.Label>Select an Experiment:</Form.Label>
+                            <select value={this.state.values.selectedExperiment.Name} onChange={
+                                (e) => this.changeExperimentFields(e)
+                            }>
+                                {experimentOptions.map((exp, id) =>
+                                    <option key={'exp'+id} value={exp.Name}>
+                                        {exp.Name}
+                                    </option>)
+                                }
+                            </select>
+                            <br />
+                            <input
+                                type="submit"
+                            >
+                            </input>
                         </form>
-                    </div>
+                    </Container>
                 )
             }
         }
     }
 
     public handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        // TODO: Create CloneExperiment action and replace this method
         event.preventDefault();
 
         const response = axios.post<{ string: string }>(

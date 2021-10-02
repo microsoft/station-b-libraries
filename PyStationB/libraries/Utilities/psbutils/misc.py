@@ -70,7 +70,7 @@ def flatten_list(lst: List[List[Any]]) -> List[Any]:  # pragma: no cover
 
 
 def find_root_directory() -> Path:  # pragma: no cover
-    path = Path(__file__).parent
+    path = Path.cwd()
     while True:
         if (path / "libraries").is_dir() and (path / "projects").is_dir():
             return path.resolve()
