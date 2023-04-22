@@ -14,6 +14,6 @@ setuptools==52.0.0
 six==1.16.0
 torch==1.8.1
 tqdm==4.60.0
-wheel==0.36.2
+wheel==0.38.1
 git+git://github.com/BrunoKM/emukit@gradients-for-covariance-gpy#egg=emukit
   
