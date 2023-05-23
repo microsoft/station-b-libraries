@@ -9,7 +9,7 @@ param==1.11.1
 pydantic==1.8.2
 pydoe==0.3.8
 pyyaml==5.4.1
-requests==2.26.0
+requests==2.31.0
 seaborn==0.11.1
 scipy==1.7.0
 sobol-seq==0.2.0
